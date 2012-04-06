@@ -162,14 +162,14 @@ public class Kantayhteys {
         yhteys.close();
     }
 
-    public List<Asiakas> Asiakkaat() throws SQLException {
+    public List<Asiakas> haeAsiakkaat() throws SQLException {
         List<Asiakas> asiakkaat = new ArrayList();
         Connection yhteys = luoYhteys();
 
         System.out.println("yhteys luotu");
 
         Statement kysely = yhteys.createStatement();
-        ResultSet tulosjoukko = kysely.executeQuery("select * from asiakas.asiakkaat");
+        ResultSet tulosjoukko = kysely.executeQuery("select * from asiakas.asiakkaat order by nimi");
 
         while (tulosjoukko.next()) {
 
@@ -180,7 +180,7 @@ public class Kantayhteys {
             String postinumero = tulosjoukko.getString("postinumero");
             String postitoimipaikka = tulosjoukko.getString("postitoimipaikka");
             String puhelinnumero = tulosjoukko.getString("puhelinnumero");
-            String yhteyshenkilo = tulosjoukko.getString("asiakkaanyhteyshenkilo");
+            String yhteyshenkilo = tulosjoukko.getString("yhteyshenkilo");
             Date asiakkaaksitulopvm = tulosjoukko.getDate("asiakkaaksitulopvm");
             String tila = tulosjoukko.getString("tila");
 
@@ -195,6 +195,42 @@ public class Kantayhteys {
         return asiakkaat;
     }
 
+        public List<Asiakas> haeAsiakas( int asiakas) throws SQLException {
+        List<Asiakas> asiakkaat = new ArrayList();
+        Connection yhteys = luoYhteys();
+
+        System.out.println("yhteys luotu");
+        
+        PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select * from asiakas.asiakkaat where asiakasnumero like ?");
+        valmisteltuKysely.setInt(1, asiakas);
+        ResultSet tulosjoukko = valmisteltuKysely.executeQuery("select * from asiakas.asiakkaat");
+
+        
+        while (tulosjoukko.next()) {
+
+            int asiakasnumero = tulosjoukko.getInt("asiakasnumero");
+            String nimi = tulosjoukko.getString("nimi");
+            String kadunnimi = tulosjoukko.getString("kadunnimi");
+            String talonnumero = tulosjoukko.getString("talonnumero");
+            String postinumero = tulosjoukko.getString("postinumero");
+            String postitoimipaikka = tulosjoukko.getString("postitoimipaikka");
+            String puhelinnumero = tulosjoukko.getString("puhelinnumero");
+            String yhteyshenkilo = tulosjoukko.getString("yhteyshenkilo");
+            Date asiakkaaksitulopvm = tulosjoukko.getDate("asiakkaaksitulopvm");
+            String tila = tulosjoukko.getString("tila");
+
+            Asiakas a = new Asiakas(asiakasnumero, nimi, kadunnimi, talonnumero,
+                                postinumero, postitoimipaikka, puhelinnumero,
+                                yhteyshenkilo, asiakkaaksitulopvm, tila);
+
+            asiakkaat.add(a);
+        }
+
+        yhteys.close();
+        return asiakkaat;
+    }
+
+    
     public static void main(String[] args) throws SQLException {
         Kantayhteys k = new Kantayhteys();
         Connection yhteys = k.luoYhteys();

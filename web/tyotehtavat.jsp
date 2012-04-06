@@ -23,33 +23,33 @@
 
                 </tr> 
                 <tr>
-                    <td height="10" colspan="4">
+                    <td>
                         <select name=asiakas" size="5"> 
-                            <option value="1."> Asiakas1 </option> 
-                            <option value="2."> Asiakas2 </option> 
-                            <option value="3."> Asiakas3 </option> 
-                            <option value="4."> Asiakas5 </option> 
-                            <option value="5."> Asiakas6 </option> 
-                            <option value="6."> Asiakas7 </option> 
-                            <option value="7."> Asiakas8 </option> 
-                            <option value="8."> Asiakas9 </option> 
+                            <option value${anro}> ${animi}</option>
+                            
+                            <c:forEach items="${asiakkaat}" var="asiakas">
+                                <option value=${asiakas.asiakasnumero}> ${asiakas.nimi}</option>
+                            </c:forEach>
+
                         </select> 
 
                     </td>
                 </tr> 
                 <tr>
                     <td>
-                    
-                <input type="submit" value="Hae asiakastiedot"/>
-                <td/>
-            </tr>
-                
+
+                        <input type="submit" name="haeAsiakas" value="Hae asiakastiedot"/>
+                    <td/>
+                </tr>
+
                 <tr> 
                     <th>Katuosoite</th>   <th>Postiosoite</th> <th>Yhteyshenkilö</th>   <th>Puhelin</th> 
                 </tr> 
                 <tr> 
-                    <td><input type="text" name="katuosoite"/></td>   <td><input type="text" name="postiosoite"/> 
-                    <td><input type="text" name="yhteyshenkilo"/></td>   <td><input type="tel" name="puhelin"/></td> 
+                    <td><input type="text" name="katuosoite" value="${akatu}"/></td>  
+                    <td><input type="text" name="postiosoite"value="${aposti}"/> 
+                    <td><input type="text" name="yhteyshenkilo"value="${ayhteyshlo}"/></td>   
+                    <td><input type="tel" name="puhelin"value="${apuhelin}"/></td> 
                 </tr> 
                 <tr>
                     <td height="10" colspan="3">
@@ -89,18 +89,18 @@
                 </tr>
                 <tr>
                     <td>
-                        
-                        <input type="submit" value="Hyväksy tyotehtava"/>
+
+                        <input type="submit" name="lisaaTyo" value="Lisää tyotehtava"/>
                     </td>
                 </tr>
                 <tr>
                     <td width="100" rowspan="6" colspan="4">
                         <textarea rows="15" cols="30"
-                        <c:forEach items="${tyotehtavat}" var="tyotehtava">
-                            ${tyotehtava.tyonumero} <br/>
-                            ${tyotehtava.kuvaus} <br/>
-                        </c:forEach>
-                            > </textarea>
+                                  <c:forEach items="${tyotehtavat}" var="tyotehtava">
+                                      ${tyotehtava.tyonumero}
+                                      ${tyotehtava.kuvaus}
+                                  </c:forEach>
+                                  > </textarea>
                     </td>
                 </tr>
             </table>  

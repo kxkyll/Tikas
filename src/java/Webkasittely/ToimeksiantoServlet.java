@@ -4,6 +4,7 @@
  */
 package Webkasittely;
 
+import Tietokantakasittely.Asiakas;
 import Tietokantakasittely.Kantayhteys;
 import Tietokantakasittely.Tyotehtava;
 import java.io.IOException;
@@ -23,15 +24,42 @@ public class ToimeksiantoServlet extends HttpServlet {
             throws ServletException, IOException {
         System.out.println("doGet");
         List<Tyotehtava> tyotehtavat = null;
+        List<Asiakas> asiakkaat = null;
 
         try {
-            tyotehtavat = k.haeTyotehtavat();
+            if (request.getParameter("haeAsiakas") != null) {
+                String asiakasnumero = (request.getParameter("asiakasnumero"));
+                
+                if (asiakasnumero != null) {
+                    
+                    int asnro = Integer.parseInt(asiakasnumero);
+                    asiakkaat = k.haeAsiakas(asnro);
+                    
+                    Asiakas a = asiakkaat.get(0);
+                    System.out.println("asiakas" +a.getAsiakasnumero() +" " +a.getNimi());
+                    request.setAttribute("anro", a.getAsiakasnumero());
+                    request.setAttribute("animi", a.getNimi());
+                    request.setAttribute("akatu", a.getKadunnimi()+ " "+a.getTalonnumero());
+                    request.setAttribute("aposti", a.getPostinumero()+ " "+a.getPostitoimipaikka());
+                    request.setAttribute("ayhteyshlo", a.getYhteyshenkilo());
+                    request.setAttribute("apuhelin", a.getPuhelinnumero());
+                    tyotehtavat = k.haeAsiakkaanTyotehtavat(asnro);
+                    asiakkaat.clear();
+                    request.setAttribute("tyotehtavat", tyotehtavat);
+                                    }
+            }else {
+                
+                asiakkaat = k.haeAsiakkaat();
+                request.setAttribute("asiakkaat", asiakkaat);
+            }
         } catch (SQLException e) {
             throw new ServletException(e);
         }
 
         response.setContentType("text/html;charset=UTF-8");
-        request.setAttribute("tyotehtavat", tyotehtavat);
+        
+        
+        
         request.getRequestDispatcher("tyotehtavat.jsp").forward(request, response);
     }
 
@@ -39,6 +67,7 @@ public class ToimeksiantoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         System.out.println("doPost");
+
         if (request.getParameter("kuvaus") != null) {
             String kuvaus = request.getParameter("kuvaus");
             kuvaus = kuvaus.replace("<", "&lt;");
