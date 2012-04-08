@@ -24,9 +24,8 @@
                 </tr> 
                 <tr>
                     <td>
-                        <select name=asiakas" size="5"> 
-                            <option value${anro}> ${animi}</option>
-                            
+                        <select name="asiakas" size="5"> 
+                                                        
                             <c:forEach items="${asiakkaat}" var="asiakas">
                                 <option value=${asiakas.asiakasnumero}> ${asiakas.nimi}</option>
                             </c:forEach>
@@ -40,6 +39,10 @@
 
                         <input type="submit" name="haeAsiakas" value="Hae asiakastiedot"/>
                     <td/>
+                </tr>
+                <tr>
+                    <td> <input type="text" name="asiakasnimi" value="$animi"/> </td>
+                    <td> <input type="text" name="asiakasnumero" value="$anro"/> </td>
                 </tr>
 
                 <tr> 
@@ -83,7 +86,7 @@
 
                 <tr>
                     <td width="100" rowspan="2" colspan="4">
-                        <textarea rows="15" cols="30"> </textarea>
+                        <textarea rows="15" cols="30" name ="kuvaus"> </textarea>
 
                     </td>
                 </tr>

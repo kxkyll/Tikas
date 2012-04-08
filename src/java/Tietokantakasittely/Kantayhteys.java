@@ -86,9 +86,9 @@ public class Kantayhteys {
         Connection yhteys = luoYhteys();
 
         System.out.println("yhteys luotu");
-        PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select * from asiakas.tyotehtavat where asiakasnumero like ?");
+        PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select * from asiakas.tyotehtavat where asiakasnumero = ?");
         valmisteltuKysely.setInt(1, asiakas);
-        ResultSet tulosjoukko = valmisteltuKysely.executeQuery("select * from asiakas.tyotehtavat");
+        ResultSet tulosjoukko = valmisteltuKysely.executeQuery();
 //        Statement kysely = yhteys.createStatement();
 //        ResultSet tulosjoukko = kysely.executeQuery("select * from asiakas.tyotehtavat");
 //        
@@ -185,8 +185,8 @@ public class Kantayhteys {
             String tila = tulosjoukko.getString("tila");
 
             Asiakas a = new Asiakas(asiakasnumero, nimi, kadunnimi, talonnumero,
-                                postinumero, postitoimipaikka, puhelinnumero,
-                                yhteyshenkilo, asiakkaaksitulopvm, tila);
+                    postinumero, postitoimipaikka, puhelinnumero,
+                    yhteyshenkilo, asiakkaaksitulopvm, tila);
 
             asiakkaat.add(a);
         }
@@ -195,17 +195,17 @@ public class Kantayhteys {
         return asiakkaat;
     }
 
-        public List<Asiakas> haeAsiakas( int asiakas) throws SQLException {
-        List<Asiakas> asiakkaat = new ArrayList();
+    public Asiakas haeAsiakas(int asiakas) throws SQLException {
+        Asiakas a = null;
         Connection yhteys = luoYhteys();
 
         System.out.println("yhteys luotu");
-        
-        PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select * from asiakas.asiakkaat where asiakasnumero like ?");
-        valmisteltuKysely.setInt(1, asiakas);
-        ResultSet tulosjoukko = valmisteltuKysely.executeQuery("select * from asiakas.asiakkaat");
 
-        
+        PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select * from asiakas.asiakkaat where asiakasnumero = ?");
+        valmisteltuKysely.setInt(1, asiakas);
+        ResultSet tulosjoukko = valmisteltuKysely.executeQuery();
+
+
         while (tulosjoukko.next()) {
 
             int asiakasnumero = tulosjoukko.getInt("asiakasnumero");
@@ -219,18 +219,17 @@ public class Kantayhteys {
             Date asiakkaaksitulopvm = tulosjoukko.getDate("asiakkaaksitulopvm");
             String tila = tulosjoukko.getString("tila");
 
-            Asiakas a = new Asiakas(asiakasnumero, nimi, kadunnimi, talonnumero,
-                                postinumero, postitoimipaikka, puhelinnumero,
-                                yhteyshenkilo, asiakkaaksitulopvm, tila);
+            a = new Asiakas(asiakasnumero, nimi, kadunnimi, talonnumero,
+                    postinumero, postitoimipaikka, puhelinnumero,
+                    yhteyshenkilo, asiakkaaksitulopvm, tila);
 
-            asiakkaat.add(a);
+
         }
 
         yhteys.close();
-        return asiakkaat;
+        return a;
     }
 
-    
     public static void main(String[] args) throws SQLException {
         Kantayhteys k = new Kantayhteys();
         Connection yhteys = k.luoYhteys();
