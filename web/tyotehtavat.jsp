@@ -25,7 +25,7 @@
                 <tr>
                     <td>
                         <select name="asiakas" size="5"> 
-                                                        
+
                             <c:forEach items="${asiakkaat}" var="asiakas">
                                 <option value=${asiakas.asiakasnumero}> ${asiakas.nimi}</option>
                             </c:forEach>
@@ -40,9 +40,12 @@
                         <input type="submit" name="haeAsiakas" value="Hae asiakastiedot"/>
                     <td/>
                 </tr>
+                <tr> 
+                    <th>Asiakkaan nimi</th>   <th>Asiakasnumero</th> 
+                </tr> 
                 <tr>
-                    <td> <input type="text" name="asiakasnimi" value="$animi"/> </td>
-                    <td> <input type="text" name="asiakasnumero" value="$anro"/> </td>
+                    <td> <input type="text" name="asiakasnimi" value="${animi}"/> </td>
+                    <td> <input type="text" name="asiakasnumero" value="${anro}"/> </td>
                 </tr>
 
                 <tr> 
@@ -96,20 +99,31 @@
                         <input type="submit" name="lisaaTyo" value="Lisää tyotehtava"/>
                     </td>
                 </tr>
+                <tr> <td> Asiakkaan työtehtävät </td> </tr>
                 <tr>
                     <td width="100" rowspan="6" colspan="4">
-                        <textarea rows="15" cols="30"
+                        
                                   <c:forEach items="${tyotehtavat}" var="tyotehtava">
                                       ${tyotehtava.tyonumero}
+                                      ${tyotehtava.tila}
                                       ${tyotehtava.kuvaus}
+                                      ${tyotehtava.kadunnimi}
+                                      ${tyotehtava.talonnumero}
+                                      ${tyotehtava.postinumero} 
+                                      ${tyotehtava.postitoimipaikka} 
+                                      ${tyotehtava.asiakkaanyhteyshenkilo} 
+                                      ${tyotehtava.puhelinnumero} 
+                                      ${tyotehtava.vastuuhenkilo} 
+                                      ${tyotehtava.toivepvm} <br>
                                   </c:forEach>
-                                  > </textarea>
+                        
                     </td>
                 </tr>
             </table>  
 
 
         </form>
+    
         <br>
 
 

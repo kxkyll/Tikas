@@ -8,6 +8,8 @@ package Tietokantakasittely;
  *
  * @author Kati
  */
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ public class Kantayhteys {
     private String kayttajatunnus = "postgres";
     private String salasana = "tikas";
     private String ajuri = "org.postgresql.Driver";
+    private String koodaus = "UTF-8";
 
     private Connection luoYhteys() throws SQLException {
         String osoite = "jdbc:postgresql://" + palvelin + ":" + portti + "/" + tietokanta;
@@ -82,6 +85,7 @@ public class Kantayhteys {
     }
 
     public List<Tyotehtava> haeAsiakkaanTyotehtavat(int asiakas) throws SQLException {
+        System.out.println("haetaan asiakkaan työtehtävät, asiakas: " + asiakas);
         List<Tyotehtava> tyotehtavat = new ArrayList();
         Connection yhteys = luoYhteys();
 
@@ -94,6 +98,7 @@ public class Kantayhteys {
 //        
         while (tulosjoukko.next()) {
             int tyonumero = tulosjoukko.getInt("tyonumero");
+            System.out.println("työnumero: " + tyonumero);
             int asiakasnumero = tulosjoukko.getInt("asiakasnumero");
             String tyolaji = tulosjoukko.getString("tyolaji");
             String kuvaus = tulosjoukko.getString("kuvaus");
@@ -117,7 +122,7 @@ public class Kantayhteys {
         return tyotehtavat;
     }
 
-    public List<Tyotehtava> haeTyotehtavat() throws SQLException {
+    public List<Tyotehtava> haeTyotehtavat() throws SQLException, UnsupportedEncodingException {
         List<Tyotehtava> tyotehtavat = new ArrayList();
         Connection yhteys = luoYhteys();
 
@@ -130,7 +135,9 @@ public class Kantayhteys {
             int tyonumero = tulosjoukko.getInt("tyonumero");
             int asiakasnumero = tulosjoukko.getInt("asiakasnumero");
             String tyolaji = tulosjoukko.getString("tyolaji");
+
             String kuvaus = tulosjoukko.getString("kuvaus");
+            kuvaus = URLDecoder.decode(kuvaus, koodaus);
             String kadunnimi = tulosjoukko.getString("kadunnimi");
             String talonnumero = tulosjoukko.getString("talonnumero");
             String postinumero = tulosjoukko.getString("postinumero");
@@ -230,7 +237,7 @@ public class Kantayhteys {
         return a;
     }
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, UnsupportedEncodingException {
         Kantayhteys k = new Kantayhteys();
         Connection yhteys = k.luoYhteys();
 
