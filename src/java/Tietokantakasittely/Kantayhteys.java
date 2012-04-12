@@ -101,6 +101,7 @@ public class Kantayhteys {
             System.out.println("työnumero: " + tyonumero);
             int asiakasnumero = tulosjoukko.getInt("asiakasnumero");
             String tyolaji = tulosjoukko.getString("tyolaji");
+            String tila = tulosjoukko.getString("tila");
             String kuvaus = tulosjoukko.getString("kuvaus");
             if (kuvaus != null) {
                 kuvaus = URLDecoder.decode(kuvaus, koodaus);
@@ -136,8 +137,9 @@ public class Kantayhteys {
             }
             Date toivepvm = tulosjoukko.getDate("toivepvm");
 
+    
 
-            Tyotehtava t = new Tyotehtava(tyonumero, asiakasnumero, tyolaji,
+            Tyotehtava t = new Tyotehtava(tyonumero, asiakasnumero, tyolaji, tila,
                     kuvaus, kadunnimi, talonnumero, postinumero, postitoimipaikka,
                     asiakkaanyhteyshenkilo, puhelinnumero, vastuuhenkilo, toivepvm); // lisää parametrit
             tyotehtavat.add(t);
@@ -159,8 +161,9 @@ public class Kantayhteys {
         while (tulosjoukko.next()) {
             int tyonumero = tulosjoukko.getInt("tyonumero");
             int asiakasnumero = tulosjoukko.getInt("asiakasnumero");
+            
             String tyolaji = tulosjoukko.getString("tyolaji");
-
+            String tila = tulosjoukko.getString("tila");
             String kuvaus = tulosjoukko.getString("kuvaus");
             kuvaus = URLDecoder.decode(kuvaus, koodaus);
             String kadunnimi = tulosjoukko.getString("kadunnimi");
@@ -180,7 +183,7 @@ public class Kantayhteys {
             Date toivepvm = tulosjoukko.getDate("toivepvm");
 
 
-            Tyotehtava t = new Tyotehtava(tyonumero, asiakasnumero, tyolaji,
+            Tyotehtava t = new Tyotehtava(tyonumero, asiakasnumero, tyolaji, tila,
                     kuvaus, kadunnimi, talonnumero, postinumero, postitoimipaikka,
                     asiakkaanyhteyshenkilo, puhelinnumero, vastuuhenkilo, toivepvm); // lisää parametrit
             tyotehtavat.add(t);
@@ -195,8 +198,39 @@ public class Kantayhteys {
         Connection yhteys = luoYhteys();
 
         Statement kysely = yhteys.createStatement();
-        kysely.executeUpdate("insert into asiakas.tyotehtavat (asiakasnumero, kuvaus) "
-                + "values (" + tyotehtava.getAsiakasnumero() + ", '" + tyotehtava.getKuvaus() + "')");
+//        kysely.executeUpdate("insert into asiakas.tyotehtavat (asiakasnumero, kuvaus) "
+//                + "values (" + tyotehtava.getAsiakasnumero() + ", '" + tyotehtava.getKuvaus() + "')");
+//        tyonumero serial PRIMARY KEY,
+//        asiakasnumero int,
+//        tyolaji char (3), -- KON,YLL,SUU,TOT
+//        tila char (1), -- N, K, L, P, V
+//        kuvaus varchar (100),
+//        kadunnimi varchar (50),
+//        talonnumero varchar (10),
+//        postinumero varchar (10),
+//        postitoimipaikka varchar (15),
+//        asiakkaanyhteyshenkilo varchar (25),
+//        puhelinnumero varchar (15),
+//        vastuuhenkilo varchar (25),
+//        toivepvm date,
+
+        // Päivämäärän tallettaminen puuttuu vielä !!!
+        // ja tila ja tyolaji
+        //  +tyotehtava.getTyolaji().substring(0, 2) + "', '"
+//        String aputyolaji = tyotehtava.getTyolaji();
+//        
+//        String tyolaji = aputyolaji.substring(0,2);
+        
+        kysely.executeUpdate("insert into asiakas.tyotehtavat "
+                + "(asiakasnumero, kuvaus, kadunnimi, talonnumero, "
+                + "postinumero, postitoimipaikka, asiakkaanyhteyshenkilo, "
+                + "puhelinnumero, vastuuhenkilo) "
+                + "values (" + tyotehtava.getAsiakasnumero() + ", '" + tyotehtava.getKuvaus() + "' , "
+                + " '" + tyotehtava.getKadunnimi()   +"', '" +tyotehtava.getTalonnumero()      +"', " 
+                + " '" + tyotehtava.getPostinumero() +"', '" +tyotehtava.getPostitoimipaikka() +"', "
+                + " '" + tyotehtava.getAsiakkaanyhteyshenkilo() +"', '" +tyotehtava.getPuhelinnumero() +"', "
+                + " '" + tyotehtava.getVastuuhenkilo() +"' )");
+ 
 
         yhteys.close();
     }

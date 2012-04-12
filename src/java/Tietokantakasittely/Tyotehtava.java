@@ -24,6 +24,7 @@ public class Tyotehtava {
 
     private int tyonumero;
     private int asiakasnumero;
+    private String tyolaji;
     private String tila;
     private String kuvaus;
     private String kadunnimi;
@@ -38,9 +39,10 @@ public class Tyotehtava {
     public Tyotehtava() {
     }
 
-    public Tyotehtava(int tyonumero, int asiakasnumero, String tila, String kuvaus, String kadunnimi, String talonnumero, String postinumero, String postitoimipaikka, String asiakkaanyhteyshenkilo, String puhelinnumero, String vastuuhenkilo, Date toivepvm) {
+    public Tyotehtava(int tyonumero, int asiakasnumero, String tyolaji, String tila, String kuvaus, String kadunnimi, String talonnumero, String postinumero, String postitoimipaikka, String asiakkaanyhteyshenkilo, String puhelinnumero, String vastuuhenkilo, Date toivepvm) {
         this.tyonumero = tyonumero;
         this.asiakasnumero = asiakasnumero;
+        this.tyolaji = tyolaji;
         this.tila = tila;
         this.kuvaus = kuvaus;
         this.kadunnimi = kadunnimi;
@@ -85,6 +87,10 @@ public class Tyotehtava {
         return talonnumero;
     }
 
+    public String getTyolaji() {
+        return tyolaji;
+    }
+    
     public String getTila() {
         return tila;
     }
@@ -133,6 +139,9 @@ public class Tyotehtava {
         this.talonnumero = talonnumero;
     }
 
+    public void setTyolaji(String tyolaji) {
+        this.tyolaji = tyolaji;
+    }
     public void setTila(String tila) {
         this.tila = tila;
     }

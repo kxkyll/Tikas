@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,6 +58,7 @@ public class ToimeksiantoServlet extends HttpServlet {
         List<Tyotehtava> tyotehtavat = null;
         List<Asiakas> asiakkaat = null;
         Asiakas a;
+        String erotin = "\\+";
 
         if (request.getParameter("haeAsiakas") != null) {
             String asiakas = (request.getParameter("asiakas"));
@@ -93,6 +95,8 @@ public class ToimeksiantoServlet extends HttpServlet {
         } else if (request.getParameter("lisaaTyo") != null) {
 
             Tyotehtava tyotehtava = new Tyotehtava();
+            Date d = new Date();
+            
 
             if (request.getParameter("asiakasnumero") != null) {
                 String asiakas = request.getParameter("asiakasnumero");
@@ -112,7 +116,8 @@ public class ToimeksiantoServlet extends HttpServlet {
             if (request.getParameter("katuosoite") != null) {
                 String katuosoite = URLEncoder.encode(request.getParameter("katuosoite"), koodaus);
                 System.out.println("katuosoite endoocauksen jälkeen: " +katuosoite);
-                String katuosoitetaulu[] = katuosoite.split(" ");
+                String katuosoitetaulu[] = katuosoite.split(erotin, 2);
+                
                 System.out.println("katuosoitetaulun pituus: " +katuosoitetaulu.length);
                 for (String k: katuosoitetaulu) {
                     System.out.println(k);
@@ -129,7 +134,7 @@ public class ToimeksiantoServlet extends HttpServlet {
             if (request.getParameter("postiosoite") != null) {
                 String postiosoite = URLEncoder.encode(request.getParameter("postiosoite"), koodaus);
 
-                String postiosoitetaulu[] = postiosoite.split(" ");
+                String postiosoitetaulu[] = postiosoite.split(erotin,2);
                 if (postiosoitetaulu.length > 1) {
                     tyotehtava.setPostinumero(postiosoitetaulu[0]);
                     tyotehtava.setPostitoimipaikka(postiosoitetaulu[1]);
