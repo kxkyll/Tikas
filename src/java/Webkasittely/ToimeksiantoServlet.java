@@ -96,7 +96,7 @@ public class ToimeksiantoServlet extends HttpServlet {
 
             Tyotehtava tyotehtava = new Tyotehtava();
             Date d = new Date();
-            
+
 
             if (request.getParameter("asiakasnumero") != null) {
                 String asiakas = request.getParameter("asiakasnumero");
@@ -105,6 +105,23 @@ public class ToimeksiantoServlet extends HttpServlet {
                 int asiakasnro = Integer.parseInt(asiakasnumero);
                 tyotehtava.setAsiakasnumero(asiakasnro);
             }
+
+            if (request.getParameter("tyolajivalinta") != null) {
+
+                String tyolaji = URLEncoder.encode(request.getParameter("tyolajivalinta"), koodaus);
+
+                tyotehtava.setTyolaji(tyolaji);
+
+            }
+            if (request.getParameter("tyotilavalinta") != null) {
+
+                String tyotila = URLEncoder.encode(request.getParameter("tyotilavalinta"), koodaus);
+
+                tyotehtava.setKuvaus(tyotila);
+
+            }
+
+
 
             if (request.getParameter("kuvaus") != null) {
 
@@ -115,14 +132,14 @@ public class ToimeksiantoServlet extends HttpServlet {
             }
             if (request.getParameter("katuosoite") != null) {
                 String katuosoite = URLEncoder.encode(request.getParameter("katuosoite"), koodaus);
-                System.out.println("katuosoite endoocauksen jälkeen: " +katuosoite);
+                System.out.println("katuosoite endoocauksen jälkeen: " + katuosoite);
                 String katuosoitetaulu[] = katuosoite.split(erotin, 2);
-                
-                System.out.println("katuosoitetaulun pituus: " +katuosoitetaulu.length);
-                for (String k: katuosoitetaulu) {
+
+                System.out.println("katuosoitetaulun pituus: " + katuosoitetaulu.length);
+                for (String k : katuosoitetaulu) {
                     System.out.println(k);
                 }
-                
+
                 if (katuosoitetaulu.length > 1) {
                     tyotehtava.setKadunnimi(katuosoitetaulu[0]);
                     tyotehtava.setTalonnumero(katuosoitetaulu[1]);
@@ -134,7 +151,7 @@ public class ToimeksiantoServlet extends HttpServlet {
             if (request.getParameter("postiosoite") != null) {
                 String postiosoite = URLEncoder.encode(request.getParameter("postiosoite"), koodaus);
 
-                String postiosoitetaulu[] = postiosoite.split(erotin,2);
+                String postiosoitetaulu[] = postiosoite.split(erotin, 2);
                 if (postiosoitetaulu.length > 1) {
                     tyotehtava.setPostinumero(postiosoitetaulu[0]);
                     tyotehtava.setPostitoimipaikka(postiosoitetaulu[1]);
@@ -153,19 +170,25 @@ public class ToimeksiantoServlet extends HttpServlet {
 
                 tyotehtava.setPuhelinnumero(puhelinnumero);
             }
+            String toivepaiva = request.getParameter("toivepaiva");
+            if (toivepaiva != null) {
 
+                int toivottu = Integer.parseInt(toivepaiva);
+                // todo: päivämäärän asettaminen puuttuu
+
+            }
 
 //            kuvaus = kuvaus.replace("<", "&lt;");
 //            kuvaus = kuvaus.replace(">", "&gt;");
 
 
-            try {
-                System.out.println("k.lisaaTyotehtava");
-                k.lisaaTyotehtava(tyotehtava);
-            } catch (SQLException e) {
-                throw new ServletException(e);
+                try {
+                    System.out.println("k.lisaaTyotehtava");
+                    k.lisaaTyotehtava(tyotehtava);
+                } catch (SQLException e) {
+                    throw new ServletException(e);
+                }
             }
+            doGet(request, response);
         }
-        doGet(request, response);
     }
-}

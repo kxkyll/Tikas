@@ -64,7 +64,7 @@
                     </td>
                 </tr>
                 <tr> 
-                    <th>Työlaji</th>   <th>Kiireellisyys</th>   <th>Suorituspäivä</th> 
+                    <th>Työlaji</th>   <th>Kiireellisyys</th>   <th>Suorituspäivä (ddmmyyyy)</th> 
                 </tr> 
                 <tr> 
                     <td><select name="tyolajivalinta"> 
@@ -80,7 +80,7 @@
                             <option value="N"> Normaali </option> 
                             <option value="K"> Kiire </option> 
                         </select> 
-                    <td> <input type="text" name="toivepaiva"   
+                    <td> <input type="date" name="toivepaiva"   
                     </td> 
                 <tr>
                     <td  colspan="3">

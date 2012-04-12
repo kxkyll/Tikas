@@ -137,7 +137,7 @@ public class Kantayhteys {
             }
             Date toivepvm = tulosjoukko.getDate("toivepvm");
 
-    
+
 
             Tyotehtava t = new Tyotehtava(tyonumero, asiakasnumero, tyolaji, tila,
                     kuvaus, kadunnimi, talonnumero, postinumero, postitoimipaikka,
@@ -161,7 +161,7 @@ public class Kantayhteys {
         while (tulosjoukko.next()) {
             int tyonumero = tulosjoukko.getInt("tyonumero");
             int asiakasnumero = tulosjoukko.getInt("asiakasnumero");
-            
+
             String tyolaji = tulosjoukko.getString("tyolaji");
             String tila = tulosjoukko.getString("tila");
             String kuvaus = tulosjoukko.getString("kuvaus");
@@ -217,20 +217,46 @@ public class Kantayhteys {
         // Päivämäärän tallettaminen puuttuu vielä !!!
         // ja tila ja tyolaji
         //  +tyotehtava.getTyolaji().substring(0, 2) + "', '"
-//        String aputyolaji = tyotehtava.getTyolaji();
+        String aputyolaji = tyotehtava.getTyolaji();
+        System.out.println("aputyolaji: " + aputyolaji);
+        String tyolaji = "";
+        if (aputyolaji.contentEquals("KON")) {
+            tyolaji = "KON";
+        }
+        if (aputyolaji.contentEquals("SUU")) {
+            tyolaji = "SUU";
+        }
+        if (aputyolaji.contentEquals("TOT")) {
+            tyolaji = "TOT";
+        }
+        if (aputyolaji.contentEquals("YLL")) {
+            tyolaji = "YLL";
+        }
+        String aputila = tyotehtava.getTyolaji();
+        char tila ='N';
+        if (aputila.contentEquals("K")) {
+            tila = 'K';
+        }
+        if (aputila.contentEquals("N")) {
+            tila = 'N';
+        }
+        System.out.println("tila: " + tila +"työlaji: " +tyolaji);
+
+
+
 //        
 //        String tyolaji = aputyolaji.substring(0,2);
-        
+
         kysely.executeUpdate("insert into asiakas.tyotehtavat "
                 + "(asiakasnumero, kuvaus, kadunnimi, talonnumero, "
                 + "postinumero, postitoimipaikka, asiakkaanyhteyshenkilo, "
                 + "puhelinnumero, vastuuhenkilo) "
                 + "values (" + tyotehtava.getAsiakasnumero() + ", '" + tyotehtava.getKuvaus() + "' , "
-                + " '" + tyotehtava.getKadunnimi()   +"', '" +tyotehtava.getTalonnumero()      +"', " 
-                + " '" + tyotehtava.getPostinumero() +"', '" +tyotehtava.getPostitoimipaikka() +"', "
-                + " '" + tyotehtava.getAsiakkaanyhteyshenkilo() +"', '" +tyotehtava.getPuhelinnumero() +"', "
-                + " '" + tyotehtava.getVastuuhenkilo() +"' )");
- 
+                + " '" + tyotehtava.getKadunnimi() + "', '" + tyotehtava.getTalonnumero() + "', "
+                + " '" + tyotehtava.getPostinumero() + "', '" + tyotehtava.getPostitoimipaikka() + "', "
+                + " '" + tyotehtava.getAsiakkaanyhteyshenkilo() + "', '" + tyotehtava.getPuhelinnumero() + "', "
+                + " '" + tyotehtava.getVastuuhenkilo() + "' )");
+
 
         yhteys.close();
     }
