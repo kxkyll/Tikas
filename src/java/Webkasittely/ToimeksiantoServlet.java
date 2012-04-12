@@ -74,10 +74,14 @@ public class ToimeksiantoServlet extends HttpServlet {
                     request.setAttribute("animi", nimi);
                     String katuosoite = URLDecoder.decode(a.getKadunnimi(), koodaus);
                     String talonumero = URLDecoder.decode(a.getTalonnumero(), koodaus);
-                    request.setAttribute("akatu", katuosoite +" " + talonumero);
-                    request.setAttribute("aposti", a.getPostinumero() + " " + a.getPostitoimipaikka());
-                    request.setAttribute("ayhteyshlo", a.getYhteyshenkilo());
-                    request.setAttribute("apuhelin", a.getPuhelinnumero());
+                    request.setAttribute("akatu", katuosoite + " " + talonumero);
+                    String postinumero = URLDecoder.decode(a.getPostinumero(), koodaus);
+                    String postitoimipaikka = URLDecoder.decode(a.getPostitoimipaikka(), koodaus);
+                    request.setAttribute("aposti", postinumero + " " + postitoimipaikka);
+                    String yhteyshenkilo = URLDecoder.decode(a.getYhteyshenkilo(), koodaus);
+                    request.setAttribute("ayhteyshlo", yhteyshenkilo);
+                    String puhelin = URLDecoder.decode(a.getPuhelinnumero(), koodaus);
+                    request.setAttribute("apuhelin", puhelin);
                     tyotehtavat = k.haeAsiakkaanTyotehtavat(asnro);
 
                     request.setAttribute("tyotehtavat", tyotehtavat);
@@ -97,27 +101,41 @@ public class ToimeksiantoServlet extends HttpServlet {
                 int asiakasnro = Integer.parseInt(asiakasnumero);
                 tyotehtava.setAsiakasnumero(asiakasnro);
             }
-            
+
             if (request.getParameter("kuvaus") != null) {
+
                 String kuvaus = URLEncoder.encode(request.getParameter("kuvaus"), koodaus);
+
                 tyotehtava.setKuvaus(kuvaus);
+
             }
             if (request.getParameter("katuosoite") != null) {
                 String katuosoite = URLEncoder.encode(request.getParameter("katuosoite"), koodaus);
-
+                System.out.println("katuosoite endoocauksen jälkeen: " +katuosoite);
                 String katuosoitetaulu[] = katuosoite.split(" ");
-                tyotehtava.setKadunnimi(katuosoitetaulu[0]);
-//                tyotehtava.setTalonnumero(katuosoitetaulu[1]);
-
+                System.out.println("katuosoitetaulun pituus: " +katuosoitetaulu.length);
+                for (String k: katuosoitetaulu) {
+                    System.out.println(k);
+                }
+                
+                if (katuosoitetaulu.length > 1) {
+                    tyotehtava.setKadunnimi(katuosoitetaulu[0]);
+                    tyotehtava.setTalonnumero(katuosoitetaulu[1]);
+                } else {
+                    tyotehtava.setKadunnimi(katuosoitetaulu[0]);
+                }
 
             }
             if (request.getParameter("postiosoite") != null) {
                 String postiosoite = URLEncoder.encode(request.getParameter("postiosoite"), koodaus);
 
                 String postiosoitetaulu[] = postiosoite.split(" ");
-                tyotehtava.setPostinumero(postiosoitetaulu[0]);
-                //              tyotehtava.setPostitoimipaikka(postiosoitetaulu[1]);
-
+                if (postiosoitetaulu.length > 1) {
+                    tyotehtava.setPostinumero(postiosoitetaulu[0]);
+                    tyotehtava.setPostitoimipaikka(postiosoitetaulu[1]);
+                } else {
+                    tyotehtava.setPostinumero(postiosoitetaulu[0]);
+                }
 
             }
             if (request.getParameter("yhteyshenkilo") != null) {

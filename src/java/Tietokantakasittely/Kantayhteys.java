@@ -84,7 +84,7 @@ public class Kantayhteys {
         yhteys.close();
     }
 
-    public List<Tyotehtava> haeAsiakkaanTyotehtavat(int asiakas) throws SQLException {
+    public List<Tyotehtava> haeAsiakkaanTyotehtavat(int asiakas) throws SQLException, UnsupportedEncodingException {
         System.out.println("haetaan asiakkaan työtehtävät, asiakas: " + asiakas);
         List<Tyotehtava> tyotehtavat = new ArrayList();
         Connection yhteys = luoYhteys();
@@ -102,13 +102,38 @@ public class Kantayhteys {
             int asiakasnumero = tulosjoukko.getInt("asiakasnumero");
             String tyolaji = tulosjoukko.getString("tyolaji");
             String kuvaus = tulosjoukko.getString("kuvaus");
+            if (kuvaus != null) {
+                kuvaus = URLDecoder.decode(kuvaus, koodaus);
+            }
             String kadunnimi = tulosjoukko.getString("kadunnimi");
+            if (kadunnimi != null) {
+                kadunnimi = URLDecoder.decode(kadunnimi, koodaus);
+            }
             String talonnumero = tulosjoukko.getString("talonnumero");
+            if (talonnumero != null) {
+                talonnumero = URLDecoder.decode(talonnumero, koodaus);
+            }
             String postinumero = tulosjoukko.getString("postinumero");
+            if (postinumero != null) {
+                postinumero = URLDecoder.decode(postinumero, koodaus);
+            }
             String postitoimipaikka = tulosjoukko.getString("postitoimipaikka");
+            if (postitoimipaikka != null) {
+                postitoimipaikka = URLDecoder.decode(postitoimipaikka, koodaus);
+            }
             String asiakkaanyhteyshenkilo = tulosjoukko.getString("asiakkaanyhteyshenkilo");
+            if (asiakkaanyhteyshenkilo != null) {
+                asiakkaanyhteyshenkilo = URLDecoder.decode(asiakkaanyhteyshenkilo, koodaus);
+            }
+
             String puhelinnumero = tulosjoukko.getString("puhelinnumero");
+            if (puhelinnumero != null) {
+                puhelinnumero = URLDecoder.decode(puhelinnumero, koodaus);
+            }
             String vastuuhenkilo = tulosjoukko.getString("vastuuhenkilo");
+            if (vastuuhenkilo != null) {
+                vastuuhenkilo = URLDecoder.decode(vastuuhenkilo, koodaus);
+            }
             Date toivepvm = tulosjoukko.getDate("toivepvm");
 
 
@@ -139,12 +164,19 @@ public class Kantayhteys {
             String kuvaus = tulosjoukko.getString("kuvaus");
             kuvaus = URLDecoder.decode(kuvaus, koodaus);
             String kadunnimi = tulosjoukko.getString("kadunnimi");
+            kadunnimi = URLDecoder.decode(kadunnimi, koodaus);
             String talonnumero = tulosjoukko.getString("talonnumero");
+            talonnumero = URLDecoder.decode(talonnumero, koodaus);
             String postinumero = tulosjoukko.getString("postinumero");
+            postinumero = URLDecoder.decode(postinumero, koodaus);
             String postitoimipaikka = tulosjoukko.getString("postitoimipaikka");
+            postitoimipaikka = URLDecoder.decode(postitoimipaikka, koodaus);
             String asiakkaanyhteyshenkilo = tulosjoukko.getString("asiakkaanyhteyshenkilo");
+            asiakkaanyhteyshenkilo = URLDecoder.decode(asiakkaanyhteyshenkilo, koodaus);
             String puhelinnumero = tulosjoukko.getString("puhelinnumero");
+            puhelinnumero = URLDecoder.decode(puhelinnumero, koodaus);
             String vastuuhenkilo = tulosjoukko.getString("vastuuhenkilo");
+            vastuuhenkilo = URLDecoder.decode(vastuuhenkilo, koodaus);
             Date toivepvm = tulosjoukko.getDate("toivepvm");
 
 
