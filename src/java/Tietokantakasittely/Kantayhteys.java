@@ -15,29 +15,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Kantayhteys {
-    private Boolean koti = true;
+
+    private Boolean koti = false;
     private String palvelin = "localhost";
     private int portti = 5432;
+    private String ajuri = "org.postgresql.Driver";
+    private String koodaus = "UTF-8";
     // Mikä portti usersilla toimii ?
     //  private String tietokanta = "postgres";
     private String tietokanta = "asiakas";
+    private String userstietokanta = "kxkyllon";
     private String kayttajatunnus = "postgres";
     private String userskayttajatunnus = "kxkyllon";
     private String salasana = "tikas";
     private String userssalasana = "92108a56194e7617";
-    private String ajuri = "org.postgresql.Driver";
-    private String koodaus = "UTF-8";
+    private String osoite;
 
     private Connection luoYhteys() throws SQLException {
-        String osoite = "jdbc:postgresql://" + palvelin + ":" + portti + "/" + tietokanta;
+        if (koti) {
+            osoite = "jdbc:postgresql://" + palvelin + ":" + portti + "/" + tietokanta;
+        } else {
+            // servlet ohjeesta
+//                conn = createConnection("org.postgresql.Driver",
+//             "jdbc:postgresql://localhost/username",
+//             "username","password");
+//            
+
+            osoite = "jdbc:postgresql://" + palvelin + "/" + userstietokanta;
+        }
         try {
             Class.forName(ajuri).newInstance();
         } catch (Exception e) {
             System.out.println("Virhe ajurin käyttöönotossa" + e.getMessage());
-            e.printStackTrace();
         }
         if (koti) {
-        return DriverManager.getConnection(osoite, kayttajatunnus, salasana);
+            return DriverManager.getConnection(osoite, kayttajatunnus, salasana);
         } else {
             return DriverManager.getConnection(osoite, userskayttajatunnus, userssalasana);
         }
@@ -239,14 +251,14 @@ public class Kantayhteys {
             tyolaji = "YLL";
         }
         String aputila = tyotehtava.getTyolaji();
-        char tila ='N';
+        char tila = 'N';
         if (aputila.contentEquals("K")) {
             tila = 'K';
         }
         if (aputila.contentEquals("N")) {
             tila = 'N';
         }
-        System.out.println("tila: " + tila +"työlaji: " +tyolaji);
+        System.out.println("tila: " + tila + "työlaji: " + tyolaji);
 
 
 
@@ -270,7 +282,7 @@ public class Kantayhteys {
     public List<Asiakas> haeAsiakkaat() throws SQLException {
         List<Asiakas> asiakkaat = new ArrayList();
         Connection yhteys = luoYhteys();
-
+       
         System.out.println("yhteys luotu");
 
         Statement kysely = yhteys.createStatement();

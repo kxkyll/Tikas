@@ -32,7 +32,10 @@ public class ToimeksiantoServlet extends HttpServlet {
         List<Tyotehtava> tyotehtavat = null;
         List<Asiakas> asiakkaat = null;
         Asiakas a = null;
-
+        // testi usersia varten
+        
+        //request.getRequestDispatcher("\\:yhteys.jsp");
+        // testi usersia varten
         try {
 
             asiakkaat = k.haeAsiakkaat();

@@ -1,7 +1,7 @@
 <%-- 
-    Document   : index
-    Created on : 21.3.2012, 16:15:24
-    Author     : Kati
+    Document   : yhteys
+    Created on : 19.4.2012, 14:30:39
+    Author     : kxkyllon
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -12,8 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
-        <a href="yhteys" target="">yhteys</a>
-       
+        <h1>Yhteys!</h1>
     </body>
 </html>

@@ -4,9 +4,25 @@
         <servlet-name>ToimeksiantoServlet</servlet-name>
         <servlet-class>Webkasittely.ToimeksiantoServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Yhteys</servlet-name>
+        <servlet-class>Webkasittely.Yhteys</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>YhteysServlet</servlet-name>
+        <servlet-class>Webkasittely.YhteysServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ToimeksiantoServlet</servlet-name>
         <url-pattern>/ToimeksiantoServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Yhteys</servlet-name>
+        <url-pattern>/Yhteys</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>YhteysServlet</servlet-name>
+        <url-pattern>/YhteysServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
