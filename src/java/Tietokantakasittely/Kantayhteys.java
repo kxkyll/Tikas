@@ -15,14 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Kantayhteys {
-
+    private Boolean koti = true;
     private String palvelin = "localhost";
     private int portti = 5432;
     // Mikä portti usersilla toimii ?
     //  private String tietokanta = "postgres";
     private String tietokanta = "asiakas";
     private String kayttajatunnus = "postgres";
+    private String userskayttajatunnus = "kxkyllon";
     private String salasana = "tikas";
+    private String userssalasana = "92108a56194e7617";
     private String ajuri = "org.postgresql.Driver";
     private String koodaus = "UTF-8";
 
@@ -34,7 +36,11 @@ public class Kantayhteys {
             System.out.println("Virhe ajurin käyttöönotossa" + e.getMessage());
             e.printStackTrace();
         }
+        if (koti) {
         return DriverManager.getConnection(osoite, kayttajatunnus, salasana);
+        } else {
+            return DriverManager.getConnection(osoite, userskayttajatunnus, userssalasana);
+        }
     }
 
     public void tulostaTyotehtavat() throws SQLException {
