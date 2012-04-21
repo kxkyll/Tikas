@@ -32,6 +32,7 @@ public class Kantayhteys {
     private String osoite;
 
     private Connection luoYhteys() throws SQLException {
+        System.out.println("testaustulostus");
         if (koti) {
             osoite = "jdbc:postgresql://" + palvelin + ":" + portti + "/" + tietokanta;
         } else {
