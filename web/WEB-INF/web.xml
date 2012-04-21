@@ -9,20 +9,44 @@
         <servlet-class>Webkasittely.Yhteys</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>YhteysServlet</servlet-name>
-        <servlet-class>Webkasittely.YhteysServlet</servlet-class>
+        <servlet-name>Tehtavalistaus</servlet-name>
+        <servlet-class>Webkasittely.Tehtavalistaus</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Tyotunnit</servlet-name>
+        <servlet-class>Webkasittely.Tyotunnit</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>Webkasittely.Login</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>Webkasittely.Logout</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ToimeksiantoServlet</servlet-name>
-        <url-pattern>/ToimeksiantoServlet</url-pattern>
+        <url-pattern>/Toimeksianto</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Yhteys</servlet-name>
         <url-pattern>/Yhteys</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>YhteysServlet</servlet-name>
-        <url-pattern>/YhteysServlet</url-pattern>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Tehtavalistaus</servlet-name>
+        <url-pattern>/Tehtavalistaus</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Tyotunnit</servlet-name>
+        <url-pattern>/Tyotunnit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/Logout</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

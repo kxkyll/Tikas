@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Kantayhteys {
 
-    private Boolean koti = false;
+    private Boolean koti = true;
     private String palvelin = "localhost";
     private int portti = 5432;
     private String ajuri = "org.postgresql.Driver";

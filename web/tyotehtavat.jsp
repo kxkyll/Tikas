@@ -12,19 +12,45 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Tyotehtavat</title>
     </head>
-    <body>
+    <body bgcolor="#F8ECE0" background="images/lightgray1.gif"> 
+
         <form method="post">
-            <table width="600" border="3" align="left"> 
+            <table width=100% border="2" bgcolor="#BDBDBD" align="left"> 
+                <tr>
+                    <td> <font face="MATISSE ITC" size="8" color="black">Työtehtävien kirjausjärjestelmä</font>
+                    </td>
+                    <td height="20" align="right"> 
+
+                        Käyttäjätunnus: <input type='text' name='ktunnus' /> Salasana: <input type='password' name='salasana' /><input type='submit' value='Kirjaudu' />
+                                <a href="Logout" target="">Kirjaudu ulos</a>
+                    </td>
+                </tr>
+
+            </table>
+            <table border="0" bgcolor="#BDBDBD" align="left"> 
+                <tr>
+                    <td height="20" width="150" bgcolor="#BDBDBD" align="center" >
+                        Login
+                    </td>
+                    <td height="25" width="150" bgcolor="#FAFAFA" align="center">
+                        Lisää työtehtävä
+                    </td>
+                    <td height="20" width="150" bgcolor="#BDBDBD" align="center">
+                        Lisää työtunteja
+                    </td>
+                </tr>
+            </table>
+            <table bgcolor="#FAFAFA" width=100% border="1" align="left"> 
                 <tr> 
 
-                    <td height="10" colspan="3">
+                    <td height="10" width=100% colspan="3">
                         Valitse asiakas
                     </td>
 
                 </tr> 
                 <tr>
                     <td colspan ="3">
-                        <select name="asiakas" size="5" autofocus="true"> 
+                        <select name="asiakas" width=100% size="5" autofocus="true"> 
 
                             <c:forEach items="${asiakkaat}" var="asiakas">
                                 <option value=${asiakas.asiakasnumero}> ${asiakas.nimi}</option>
@@ -40,11 +66,11 @@
                         <input type="submit" name="haeAsiakas" value="Hae asiakastiedot"/>
                     </td>
                 </tr>
-                
-                    <th>Asiakkaan nimi</th>   <th>Asiakasnumero</th> <th>Yhteyshenkilö</th>
-                 
+
+                <th >Asiakkaan nimi</th>   <th>Asiakasnumero</th> <th>Yhteyshenkilö</th>
+
                 <tr>
-                    <td> <input type="text" name="asiakasnimi" value="${animi}"/> </td>
+                    <td width= 100% > <input type="text" name="asiakasnimi" value="${animi}"/> </td>
                     <td> <input type="text" name="asiakasnumero" value="${anro}"/> </td>
                     <td><input type="text" name="yhteyshenkilo"value="${ayhteyshlo}"/></td>   
                 </tr>
@@ -55,7 +81,7 @@
                 <tr> 
                     <td><input type="text" name="katuosoite" value="${akatu}"/></td>  
                     <td><input type="text" name="postiosoite"value="${aposti}"/> 
-                    
+
                     <td><input type="tel" name="puhelin"value="${apuhelin}"/></td> 
                 </tr> 
                 <tr>
@@ -94,37 +120,38 @@
 
                     </td>
                 </tr>
+                <tr></tr> 
                 <tr>
                     <td>
 
                         <input type="submit" name="lisaaTyo" value="Lisää tyotehtava"/>
                     </td>
                 </tr>
-                <tr> <td> Asiakkaan työtehtävät </td> </tr>
+                <tr> <td> Asiakkaan kaikki työtehtävät </td> </tr>
                 <tr>
                     <td width="100" rowspan="6" colspan="4">
-                        
-                                  <c:forEach items="${tyotehtavat}" var="tyotehtava">
-                                      ${tyotehtava.tyonumero}
-                                      ${tyotehtava.tila}
-                                      ${tyotehtava.kuvaus}
-                                      ${tyotehtava.kadunnimi}
-                                      ${tyotehtava.talonnumero}
-                                      ${tyotehtava.postinumero} 
-                                      ${tyotehtava.postitoimipaikka} 
-                                      ${tyotehtava.asiakkaanyhteyshenkilo} 
-                                      ${tyotehtava.puhelinnumero} 
-                                      ${tyotehtava.vastuuhenkilo} 
-                                      ${tyotehtava.toivepvm} <br>
-                                  </c:forEach>
-                        
+
+                        <c:forEach items="${tyotehtavat}" var="tyotehtava">
+                            ${tyotehtava.tyonumero}
+                            ${tyotehtava.tila}
+                            ${tyotehtava.kuvaus}
+                            ${tyotehtava.kadunnimi}
+                            ${tyotehtava.talonnumero}
+                            ${tyotehtava.postinumero} 
+                            ${tyotehtava.postitoimipaikka} 
+                            ${tyotehtava.asiakkaanyhteyshenkilo} 
+                            ${tyotehtava.puhelinnumero} 
+                            ${tyotehtava.vastuuhenkilo} 
+                            ${tyotehtava.toivepvm} <br>
+                        </c:forEach>
+
                     </td>
                 </tr>
             </table>  
 
 
         </form>
-    
+
         <br>
 
 

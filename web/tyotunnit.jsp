@@ -1,7 +1,7 @@
 <%-- 
-    Document   : yhteys
-    Created on : 19.4.2012, 14:30:39
-    Author     : kxkyllon
+    Document   : tyotunnit
+    Created on : 19.4.2012, 17:39:52
+    Author     : Kati
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -12,6 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Yhteys!</h1>
+        <h1>Hello World!</h1>
     </body>
 </html>

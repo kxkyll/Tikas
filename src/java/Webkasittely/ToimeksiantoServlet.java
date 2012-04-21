@@ -19,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class ToimeksiantoServlet extends HttpServlet {
 
@@ -29,11 +30,36 @@ public class ToimeksiantoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         System.out.println("doGet");
+
+        HttpSession session = request.getSession(false);
+        if (session == null) { // käyttäjällä ei ole sessiota
+            System.out.println("ei ole sessiota");
+            response.setContentType("text/html;charset=UTF-8");
+            response.sendRedirect("Login");
+           //request.getRequestDispatcher("tyotehtavat.jsp").forward(request, response);
+           return;
+
+        } else {
+            System.out.println("Sessio on olemassa");
+            if ((session.getAttribute("ktunnus") != null || session.getAttribute("salasana") !=  null)) {
+                System.out.println("tunnukset sessiolla");
+            } else {
+                System.out.println("kayttaja ei ole antanut käyttäjätunnusta "
+                        + "tai salasanaa, tai ne ovat kadonneet sessiosta");
+                response.setContentType("text/html;charset=UTF-8");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+
+            }
+
+            // tarkista käyttäjätiedot
+            // luo sessio
+        }
         List<Tyotehtava> tyotehtavat = null;
         List<Asiakas> asiakkaat = null;
         Asiakas a = null;
         // testi usersia varten
-        
+
         //request.getRequestDispatcher("\\:yhteys.jsp");
         // testi usersia varten
         try {
@@ -41,15 +67,11 @@ public class ToimeksiantoServlet extends HttpServlet {
             asiakkaat = k.haeAsiakkaat();
             request.setAttribute("asiakkaat", asiakkaat);
 
-
-
         } catch (SQLException e) {
             throw new ServletException(e);
         }
 
         response.setContentType("text/html;charset=UTF-8");
-
-
 
         request.getRequestDispatcher("tyotehtavat.jsp").forward(request, response);
     }
@@ -185,13 +207,13 @@ public class ToimeksiantoServlet extends HttpServlet {
 //            kuvaus = kuvaus.replace(">", "&gt;");
 
 
-                try {
-                    System.out.println("k.lisaaTyotehtava");
-                    k.lisaaTyotehtava(tyotehtava);
-                } catch (SQLException e) {
-                    throw new ServletException(e);
-                }
+            try {
+                System.out.println("k.lisaaTyotehtava");
+                k.lisaaTyotehtava(tyotehtava);
+            } catch (SQLException e) {
+                throw new ServletException(e);
             }
-            doGet(request, response);
         }
+        doGet(request, response);
     }
+}
