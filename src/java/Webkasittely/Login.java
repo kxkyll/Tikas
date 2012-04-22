@@ -4,8 +4,13 @@
  */
 package Webkasittely;
 
+import Tietokantakasittely.Kantayhteys;
+import Tietokantakasittely.Kayttaja;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +23,8 @@ import javax.servlet.http.HttpSession;
  * @author Kati
  */
 public class Login extends HttpServlet {
+
+    private Kantayhteys k;
 
     /**
      * Processes requests for both HTTP
@@ -85,24 +92,38 @@ public class Login extends HttpServlet {
         //processRequest(request, response);
 
         System.out.println("Login doPost");
-        
+
 
         String ktunnus = request.getParameter("ktunnus");
         System.out.println("ktunnus: " + ktunnus);
         String salasana = request.getParameter("salasana");
-        System.out.println("salasana " +salasana);
+        System.out.println("salasana " + salasana);
         // salsanan ja kayttajatunnuksen tarkistukset
-        if ((ktunnus != null && ktunnus.length() > 3 && ktunnus.length() < 9) && (salasana != null)) {
-            // lisää sessioon attribuutti tunnus
-            System.out.println("tunnarit kunnossa");
-            HttpSession session = request.getSession();
-            session.setAttribute("ktunnus", ktunnus);
-            session.setAttribute("salasana", salasana);
-            //response.encodeRedirectURL("ToimeksiantoServlet");
-            response.sendRedirect(request.getContextPath() + "/Toimeksianto");
-            
-            response.flushBuffer();
+        //if ((ktunnus != null && ktunnus.length() > 3 && ktunnus.length() < 9) && (salasana != null)) {
+        if (ktunnus != null && ktunnus.length() > 5 && ktunnus.length() < 9) {
+            if (salasana != null && salasana.length() > 8 && salasana.length() < 17) {
 
+                System.out.println("tunnarien pituudet kunnossa");
+                k = new Kantayhteys();
+                try {
+                    Kayttaja kirjautuja = k.haeKayttajatiedot(ktunnus);
+                    if (salasana.equals(kirjautuja.getSalasana())) {
+                        HttpSession session = request.getSession();
+                        session.setAttribute("ktunnus", ktunnus);
+                        //session.setAttribute("salasana", salasana);
+                        
+                        response.sendRedirect(request.getContextPath() + "/Toimeksianto");
+
+                        response.flushBuffer();
+                        return;
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                System.out.println("salasana ei täsmää");
+                response.sendRedirect(request.getContextPath() + "/Login");
+            }
         } else {
             System.out.println("valuttiin else haaraan");
             response.sendRedirect(request.getContextPath() + "/Login");

@@ -21,7 +21,8 @@
                     </td>
                     <td height="20" align="right"> 
 
-                        Käyttäjätunnus: <input type='text' name='ktunnus' /> Salasana: <input type='password' name='salasana' /><input type='submit' value='Kirjaudu' />
+                        Käyttäjätunnus: <input type='text' name='ktunnus' maxlength="8" /> 
+                        Salasana: <input type='password' name='salasana' maxlength="16" /><input type='submit' value='Kirjaudu' />
                         <br>
                         <a href="Logout" target="">Kirjaudu ulos</a>
                     </td>

@@ -370,4 +370,26 @@ public class Kantayhteys {
 
 
     }
+
+    public Kayttaja haeKayttajatiedot(String ktunnus) throws SQLException {
+        Kayttaja kayttaja = new Kayttaja(); 
+        
+        Connection yhteys = luoYhteys();
+
+        System.out.println("yhteys luotu");
+        PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select * from asiakas.kayttajat where kayttajatunnus = ?");
+        valmisteltuKysely.setString(1, ktunnus);
+        ResultSet tulosjoukko = valmisteltuKysely.executeQuery();
+        
+        while (tulosjoukko.next()) {
+            
+            kayttaja.setKtunnus(tulosjoukko.getString("kayttajatunnus"));
+            kayttaja.setSalasana(tulosjoukko.getString("salasana"));
+            System.out.println(kayttaja.getKtunnus());
+            System.out.println(kayttaja.getSalasana());
+        }
+
+        yhteys.close();
+        return kayttaja;
+    }
 }
