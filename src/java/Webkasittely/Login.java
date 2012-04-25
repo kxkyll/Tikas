@@ -98,8 +98,7 @@ public class Login extends HttpServlet {
         System.out.println("ktunnus: " + ktunnus);
         String salasana = request.getParameter("salasana");
         System.out.println("salasana " + salasana);
-        // salsanan ja kayttajatunnuksen tarkistukset
-        //if ((ktunnus != null && ktunnus.length() > 3 && ktunnus.length() < 9) && (salasana != null)) {
+
         if (ktunnus != null && ktunnus.length() > 5 && ktunnus.length() < 9) {
             if (salasana != null && salasana.length() > 8 && salasana.length() < 17) {
 
@@ -111,7 +110,7 @@ public class Login extends HttpServlet {
                         HttpSession session = request.getSession();
                         session.setAttribute("ktunnus", ktunnus);
                         //session.setAttribute("salasana", salasana);
-                        
+
                         response.sendRedirect(request.getContextPath() + "/Toimeksianto");
 
                         response.flushBuffer();
@@ -122,13 +121,25 @@ public class Login extends HttpServlet {
                 }
 
                 System.out.println("salasana ei täsmää");
-                response.sendRedirect(request.getContextPath() + "/Login");
+                request.setAttribute("virhe", "Virheellinen käyttäjätunnus tai salasana");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
+                dispatcher.forward(request, response);
+                //response.sendRedirect(request.getContextPath() + "/Login");
+
+            } else {
+                System.out.println("salasana ei oikean mittainen");
+                request.setAttribute("virhe", "Virheellinen käyttäjätunnus tai salasana");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
+                dispatcher.forward(request, response);
+                //response.sendRedirect(request.getContextPath() + "/Login");
             }
         } else {
-            System.out.println("valuttiin else haaraan");
-            response.sendRedirect(request.getContextPath() + "/Login");
+            System.out.println("kayttajatunnus ei oikean mittainen");
+            request.setAttribute("virhe", "Virheellinen käyttäjätunnus tai salasana");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
+            dispatcher.forward(request, response);
+            //response.sendRedirect(request.getContextPath() + "/Login");
         }
-
     }
 
     /**

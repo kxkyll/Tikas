@@ -21,8 +21,9 @@
                     </td>
                     <td height="20" align="right"> 
 
-                        Käyttäjätunnus: <input type='text' name='ktunnus' /> Salasana: <input type='password' name='salasana' /><input type='submit' value='Kirjaudu' />
-                                <a href="Logout" target="">Kirjaudu ulos</a>
+                        <font color="blue"> Olet kirjautunut käyttäjätunnuksella: ${ktunnus} 
+                        <a href="Login" target="">Kirjaudu ulos</a></font>
+                        
                     </td>
                 </tr>
 
@@ -65,13 +66,14 @@
 
                         <input type="submit" name="haeAsiakas" value="Hae asiakastiedot"/>
                     </td>
+                    <td> <input type="hidden" name="asiakasnumero"value="${anro}"/></td>   
                 </tr>
 
                 <th >Asiakkaan nimi</th>   <th>Asiakasnumero</th> <th>Yhteyshenkilö</th>
 
                 <tr>
-                    <td width= 100% > <input type="text" name="asiakasnimi" value="${animi}"/> </td>
-                    <td> <input type="text" name="asiakasnumero" value="${anro}"/> </td>
+                    <td width= 100% > <text name="asiakasnimi"> ${animi} </td>
+                    <td> <text> ${anro}</text> </td>
                     <td><input type="text" name="yhteyshenkilo"value="${ayhteyshlo}"/></td>   
                 </tr>
 
@@ -126,6 +128,7 @@
 
                         <input type="submit" name="lisaaTyo" value="Lisää tyotehtava"/>
                     </td>
+                    <font color="red"> ${virhe}</font>
                 </tr>
                 <tr> <td> Asiakkaan kaikki työtehtävät </td> </tr>
                 <tr>

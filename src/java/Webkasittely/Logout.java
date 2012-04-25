@@ -82,10 +82,14 @@ public class Logout extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session != null) { // käyttäjällä ei ole sessiota
+        if (session != null) { // lopetetaan sessio jos sellainen on
             session.invalidate();
         }
-        processRequest(request, response);
+        //processRequest(request, response);
+        
+        request.setAttribute("viesti", "Olet kirjautunut ulos");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
+                dispatcher.forward(request, response);
     }
 
     /**

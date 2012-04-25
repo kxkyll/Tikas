@@ -11,6 +11,8 @@ package Tietokantakasittely;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -154,8 +156,15 @@ public class Kantayhteys {
             if (vastuuhenkilo != null) {
                 vastuuhenkilo = URLDecoder.decode(vastuuhenkilo, koodaus);
             }
-            Date toivepvm = tulosjoukko.getDate("toivepvm");
+            Date pvm = tulosjoukko.getDate("toivepvm");
+            System.out.println("pvm: " + pvm);
+            String toivepvm = "14062012";
+            if (pvm != null) {
+                DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
+                toivepvm = formatter.format(pvm);
+//            Date toivepvm = tulosjoukko.getDate("toivepvm");
+            }
 
 
             Tyotehtava t = new Tyotehtava(tyonumero, asiakasnumero, tyolaji, tila,
@@ -199,7 +208,16 @@ public class Kantayhteys {
             puhelinnumero = URLDecoder.decode(puhelinnumero, koodaus);
             String vastuuhenkilo = tulosjoukko.getString("vastuuhenkilo");
             vastuuhenkilo = URLDecoder.decode(vastuuhenkilo, koodaus);
-            Date toivepvm = tulosjoukko.getDate("toivepvm");
+            //Date toivepvm = tulosjoukko.getDate("toivepvm");
+            Date pvm = tulosjoukko.getDate("toivepvm");
+            System.out.println("pvm: " + pvm);
+            String toivepvm = "12/06/2012";
+            if (pvm != null) {
+                DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+                toivepvm = formatter.format(pvm);
+//            Date toivepvm = tulosjoukko.getDate("toivepvm");
+            }
 
 
             Tyotehtava t = new Tyotehtava(tyonumero, asiakasnumero, tyolaji, tila,
@@ -283,7 +301,7 @@ public class Kantayhteys {
     public List<Asiakas> haeAsiakkaat() throws SQLException {
         List<Asiakas> asiakkaat = new ArrayList();
         Connection yhteys = luoYhteys();
-       
+
         System.out.println("yhteys luotu");
 
         Statement kysely = yhteys.createStatement();
@@ -372,17 +390,17 @@ public class Kantayhteys {
     }
 
     public Kayttaja haeKayttajatiedot(String ktunnus) throws SQLException {
-        Kayttaja kayttaja = new Kayttaja(); 
-        
+        Kayttaja kayttaja = new Kayttaja();
+
         Connection yhteys = luoYhteys();
 
         System.out.println("yhteys luotu");
         PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select * from asiakas.kayttajat where kayttajatunnus = ?");
         valmisteltuKysely.setString(1, ktunnus);
         ResultSet tulosjoukko = valmisteltuKysely.executeQuery();
-        
+
         while (tulosjoukko.next()) {
-            
+
             kayttaja.setKtunnus(tulosjoukko.getString("kayttajatunnus"));
             kayttaja.setSalasana(tulosjoukko.getString("salasana"));
             System.out.println(kayttaja.getKtunnus());
@@ -391,5 +409,23 @@ public class Kantayhteys {
 
         yhteys.close();
         return kayttaja;
+    }
+
+    public String haeTyontekija(String ktunnus) throws SQLException {
+        String vastuuhenkilo = "";
+        Connection yhteys = luoYhteys();
+
+        System.out.println("yhteys luotu");
+        PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select * from asiakas.tyontekijat where kayttajatunnus = ?");
+        valmisteltuKysely.setString(1, ktunnus);
+        ResultSet tulosjoukko = valmisteltuKysely.executeQuery();
+
+        while (tulosjoukko.next()) {
+            vastuuhenkilo = tulosjoukko.getString("nimi");
+            
+        }
+
+        yhteys.close();
+        return vastuuhenkilo;
     }
 }

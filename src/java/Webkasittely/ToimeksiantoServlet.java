@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,18 +31,23 @@ public class ToimeksiantoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         System.out.println("doGet");
+        List<Tyotehtava> tyotehtavat = null;
+        List<Asiakas> asiakkaat = null;
+        Asiakas a = null;
 
         HttpSession session = request.getSession(false);
         if (session == null) { // käyttäjällä ei ole sessiota
             System.out.println("ei ole sessiota");
             response.setContentType("text/html;charset=UTF-8");
             response.sendRedirect("Login");
-           //request.getRequestDispatcher("tyotehtavat.jsp").forward(request, response);
-           return;
+            //request.getRequestDispatcher("tyotehtavat.jsp").forward(request, response);
+            return;
 
         } else {
             System.out.println("Sessio on olemassa");
-            if ((session.getAttribute("ktunnus") != null || session.getAttribute("salasana") !=  null)) {
+            if ((session.getAttribute("ktunnus") != null || session.getAttribute("salasana") != null)) {
+                String kayttaja = (String) session.getAttribute("ktunnus");
+                request.setAttribute("ktunnus", kayttaja);
                 System.out.println("tunnukset sessiolla");
             } else {
                 System.out.println("kayttaja ei ole antanut käyttäjätunnusta "
@@ -55,9 +61,7 @@ public class ToimeksiantoServlet extends HttpServlet {
             // tarkista käyttäjätiedot
             // luo sessio
         }
-        List<Tyotehtava> tyotehtavat = null;
-        List<Asiakas> asiakkaat = null;
-        Asiakas a = null;
+
         // testi usersia varten
 
         //request.getRequestDispatcher("\\:yhteys.jsp");
@@ -118,17 +122,18 @@ public class ToimeksiantoServlet extends HttpServlet {
 
             }
         } else if (request.getParameter("lisaaTyo") != null) {
-
+            System.out.println("lisääTyö");
             Tyotehtava tyotehtava = new Tyotehtava();
             Date d = new Date();
 
-
             if (request.getParameter("asiakasnumero") != null) {
+
                 String asiakas = request.getParameter("asiakasnumero");
                 System.out.println("asiakas: " + asiakas);
                 String asiakasnumero = URLEncoder.encode(asiakas, koodaus);
                 int asiakasnro = Integer.parseInt(asiakasnumero);
                 tyotehtava.setAsiakasnumero(asiakasnro);
+
             }
 
             if (request.getParameter("tyolajivalinta") != null) {
@@ -190,30 +195,133 @@ public class ToimeksiantoServlet extends HttpServlet {
 
                 tyotehtava.setAsiakkaanyhteyshenkilo(yhteyshenkilo);
             }
-            if (request.getParameter("puhelinnumero") != null) {
-                String puhelinnumero = URLEncoder.encode(request.getParameter("puhelinnumero"), koodaus);
+            if (request.getParameter("puhelin") != null) {
+                String puhelinnumero = URLEncoder.encode(request.getParameter("puhelin"), koodaus);
 
                 tyotehtava.setPuhelinnumero(puhelinnumero);
             }
             String toivepaiva = request.getParameter("toivepaiva");
-            if (toivepaiva != null) {
+            if (toivepaiva != null && toivepaiva.length() > 7) {
+                //(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)
+                if (toivepaiva.matches("(0?[1-9]|[12][0-9]|3[01])(0?[1-9]|1[012])((19|20)\\d\\d)")) {
+                    String pv = toivepaiva.substring(0, 2);
+                    String kk = toivepaiva.substring(2, 4);
+                    String vv = toivepaiva.substring(6, 8);
+                    String paiva = "pv" + "/" + "kk" + "/" + vv;
+//                    Date p = new Date();
+//                    DateFormat formatter = new DateFormat();
+//                    String format = DateFormat.getInstance().format(paiva);
+                    tyotehtava.setToivepvm(paiva);
 
-                int toivottu = Integer.parseInt(toivepaiva);
-                // todo: päivämäärän asettaminen puuttuu
+                } else {
+                    request.setAttribute("virhe", "Virheellinen päivämäärä");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/tyotehtavat.jsp");
+                    dispatcher.forward(request, response);
+                }
+
+            }
+            HttpSession session = request.getSession(false);
+            if (session != null) { // käyttäjällä ei ole sessiota
+                String kayttaja = (String) session.getAttribute("ktunnus");
+                String vastuuhenkilo;
+                try {
+                    vastuuhenkilo = k.haeTyontekija(kayttaja);
+                    tyotehtava.setVastuuhenkilo(vastuuhenkilo);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ToimeksiantoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                try {
+                    System.out.println("k.lisaaTyotehtava");
+                    k.lisaaTyotehtava(tyotehtava);
+
+
+                } catch (SQLException e) {
+                    throw new ServletException(e);
+                }
+            }
+            if (request.getParameter("asiakasnumero") != null) {
+
+                String asiakas = request.getParameter("asiakasnumero");
+                System.out.println("asiakas: " + asiakas);
+                String asiakasnumero = URLEncoder.encode(asiakas, koodaus);
+                int asiakasnro = Integer.parseInt(asiakasnumero);
+//                    String asiakas = (request.getParameter("anro"));
+//                    System.out.println("asiakas: " + asiakas);
+//
+//                    if (asiakas != null) {
+//
+//                        int asnro = Integer.parseInt(asiakas);
+//                        System.out.println("asnro: " + asnro);
+                try {
+                    //                        a = k.haeAsiakas(asnro);
+                    a = k.haeAsiakas(asiakasnro);
+                    request.setAttribute("anro", a.getAsiakasnumero());
+                    String nimi = URLDecoder.decode(a.getNimi(), koodaus);
+                    request.setAttribute("animi", nimi);
+                    String katuosoite = URLDecoder.decode(a.getKadunnimi(), koodaus);
+                    String talonumero = URLDecoder.decode(a.getTalonnumero(), koodaus);
+                    request.setAttribute("akatu", katuosoite + " " + talonumero);
+                    String postinumero = URLDecoder.decode(a.getPostinumero(), koodaus);
+                    String postitoimipaikka = URLDecoder.decode(a.getPostitoimipaikka(), koodaus);
+                    request.setAttribute("aposti", postinumero + " " + postitoimipaikka);
+                    String yhteyshenkilo = URLDecoder.decode(a.getYhteyshenkilo(), koodaus);
+                    request.setAttribute("ayhteyshlo", yhteyshenkilo);
+                    String puhelin = URLDecoder.decode(a.getPuhelinnumero(), koodaus);
+                    request.setAttribute("apuhelin", puhelin);
+//                        tyotehtavat = k.haeAsiakkaanTyotehtavat(asnro);
+                    tyotehtavat = k.haeAsiakkaanTyotehtavat(asiakasnro);
+                    request.setAttribute("tyotehtavat", tyotehtavat);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ToimeksiantoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             }
 
-//            kuvaus = kuvaus.replace("<", "&lt;");
-//            kuvaus = kuvaus.replace(">", "&gt;");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/tyotehtavat.jsp");
+            dispatcher.forward(request, response);
 
-
-            try {
-                System.out.println("k.lisaaTyotehtava");
-                k.lisaaTyotehtava(tyotehtava);
-            } catch (SQLException e) {
-                throw new ServletException(e);
-            }
+            //doGet(request, response);
         }
-        doGet(request, response);
+        if (request.getParameter("asiakasnumero") != null) {
+
+            String asiakas = request.getParameter("asiakasnumero");
+            System.out.println("asiakas: " + asiakas);
+            String asiakasnumero = URLEncoder.encode(asiakas, koodaus);
+            int asiakasnro = Integer.parseInt(asiakasnumero);
+//                    String asiakas = (request.getParameter("anro"));
+//                    System.out.println("asiakas: " + asiakas);
+//
+//                    if (asiakas != null) {
+//
+//                        int asnro = Integer.parseInt(asiakas);
+//                        System.out.println("asnro: " + asnro);
+            try {
+                //                        a = k.haeAsiakas(asnro);
+                a = k.haeAsiakas(asiakasnro);
+                request.setAttribute("anro", a.getAsiakasnumero());
+                String nimi = URLDecoder.decode(a.getNimi(), koodaus);
+                request.setAttribute("animi", nimi);
+                String katuosoite = URLDecoder.decode(a.getKadunnimi(), koodaus);
+                String talonumero = URLDecoder.decode(a.getTalonnumero(), koodaus);
+                request.setAttribute("akatu", katuosoite + " " + talonumero);
+                String postinumero = URLDecoder.decode(a.getPostinumero(), koodaus);
+                String postitoimipaikka = URLDecoder.decode(a.getPostitoimipaikka(), koodaus);
+                request.setAttribute("aposti", postinumero + " " + postitoimipaikka);
+                String yhteyshenkilo = URLDecoder.decode(a.getYhteyshenkilo(), koodaus);
+                request.setAttribute("ayhteyshlo", yhteyshenkilo);
+                String puhelin = URLDecoder.decode(a.getPuhelinnumero(), koodaus);
+                request.setAttribute("apuhelin", puhelin);
+//                        tyotehtavat = k.haeAsiakkaanTyotehtavat(asnro);
+                tyotehtavat = k.haeAsiakkaanTyotehtavat(asiakasnro);
+                request.setAttribute("tyotehtavat", tyotehtavat);
+            } catch (SQLException ex) {
+                Logger.getLogger(ToimeksiantoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/tyotehtavat.jsp");
+            dispatcher.forward(request, response);
+
+        }
     }
 }

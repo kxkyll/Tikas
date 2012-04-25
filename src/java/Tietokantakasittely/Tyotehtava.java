@@ -34,12 +34,13 @@ public class Tyotehtava {
     private String asiakkaanyhteyshenkilo;
     private String puhelinnumero;
     private String vastuuhenkilo;
-    private Date toivepvm;
+    //private Date toivepvm;
+    private String toivepvm;
 
     public Tyotehtava() {
     }
 
-    public Tyotehtava(int tyonumero, int asiakasnumero, String tyolaji, String tila, String kuvaus, String kadunnimi, String talonnumero, String postinumero, String postitoimipaikka, String asiakkaanyhteyshenkilo, String puhelinnumero, String vastuuhenkilo, Date toivepvm) {
+    public Tyotehtava(int tyonumero, int asiakasnumero, String tyolaji, String tila, String kuvaus, String kadunnimi, String talonnumero, String postinumero, String postitoimipaikka, String asiakkaanyhteyshenkilo, String puhelinnumero, String vastuuhenkilo, String toivepvm) {
         this.tyonumero = tyonumero;
         this.asiakasnumero = asiakasnumero;
         this.tyolaji = tyolaji;
@@ -95,7 +96,7 @@ public class Tyotehtava {
         return tila;
     }
 
-    public Date getToivepvm() {
+    public String getToivepvm() {
         return toivepvm;
     }
 
@@ -146,7 +147,7 @@ public class Tyotehtava {
         this.tila = tila;
     }
 
-    public void setToivepvm(Date toivepvm) {
+    public void setToivepvm(String toivepvm) {
         this.toivepvm = toivepvm;
     }
 
@@ -162,5 +163,9 @@ public class Tyotehtava {
     public String toString() {
         return "Tyotehtava{" + "tyonumero=" + tyonumero + ", asiakasnumero=" + asiakasnumero + ", tila=" + tila + ", kuvaus=" + kuvaus + ", kadunnimi=" + kadunnimi + ", talonnumero=" + talonnumero + ", postinumero=" + postinumero + ", postitoimipaikka=" + postitoimipaikka + ", asiakkaanyhteyshenkilo=" + asiakkaanyhteyshenkilo + ", puhelinnumero=" + puhelinnumero + ", vastuuhenkilo=" + vastuuhenkilo + ", toivepvm=" + toivepvm + '}';
     }
+
+//    public void setToivepvm(java.util.Date d) {
+//        this.toivepvm = (Date) d;
+//            }
 
 }

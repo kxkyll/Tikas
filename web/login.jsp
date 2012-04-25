@@ -24,7 +24,8 @@
                         Käyttäjätunnus: <input type='text' name='ktunnus' maxlength="8" /> 
                         Salasana: <input type='password' name='salasana' maxlength="16" /><input type='submit' value='Kirjaudu' />
                         <br>
-                        <a href="Logout" target="">Kirjaudu ulos</a>
+
+                        <font color="red"> ${virhe}</font>
                     </td>
                 </tr>
 
@@ -42,3 +43,5 @@
                     </td>
                 </tr>
             </table>
+
+            <font color="blue"> ${viesti}</font>
