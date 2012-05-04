@@ -12,7 +12,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Tyotehtavat</title>
     </head>
-    <body bgcolor="#F8ECE0" background="images/lightgray1.gif"> 
+    <body bgcolor="#F8ECE0" background="images/lightgray1.gif" bgproperties ="fixed"> 
 
         <form method="post">
             <table width=100% border="2" bgcolor="#BDBDBD" align="left"> 
@@ -49,8 +49,8 @@
                     </td>
 
                 </tr> 
-                <tr>
-                    <td colspan ="3">
+                <tr onmousedown= 'alert("onmousedown testausta....")'>
+                    <td width="100%" colspan="3">
                         <select name="asiakas" width=100% size="5" autofocus="true"> 
 
                             <c:forEach items="${asiakkaat}" var="asiakas">
@@ -58,15 +58,16 @@
                             </c:forEach>
 
                         </select> 
-
                     </td>
+                    
                 </tr> 
                 <tr>
                     <td colspan ="3">
 
                         <input type="submit" name="haeAsiakas" value="Hae asiakastiedot"/>
+                        <input type="hidden" name="asiakasnumero"value="${anro}"/>   
                     </td>
-                    <td> <input type="hidden" name="asiakasnumero"value="${anro}"/></td>   
+                     
                 </tr>
 
                 <th >Asiakkaan nimi</th>   <th>Asiakasnumero</th> <th>Yhteyshenkilö</th>
@@ -110,7 +111,7 @@
                         </select> 
                     <td> <input type="date" name="toivepaiva"   
                     </td> 
-                <tr>
+                <tr onmousedown='alert("onmousedown effect test....")'> 
                     <td  colspan="3">
                         Työtehtävän kuvaus
                     </td>

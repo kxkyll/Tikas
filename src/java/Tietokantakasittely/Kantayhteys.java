@@ -211,7 +211,8 @@ public class Kantayhteys {
             //Date toivepvm = tulosjoukko.getDate("toivepvm");
             Date pvm = tulosjoukko.getDate("toivepvm");
             System.out.println("pvm: " + pvm);
-            String toivepvm = "12/06/2012";
+            //String toivepvm = "12/06/2012";
+            String toivepvm = "";
             if (pvm != null) {
                 DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -287,12 +288,13 @@ public class Kantayhteys {
         kysely.executeUpdate("insert into asiakas.tyotehtavat "
                 + "(asiakasnumero, kuvaus, kadunnimi, talonnumero, "
                 + "postinumero, postitoimipaikka, asiakkaanyhteyshenkilo, "
-                + "puhelinnumero, vastuuhenkilo) "
+                + "puhelinnumero, vastuuhenkilo, toivepvm) "
                 + "values (" + tyotehtava.getAsiakasnumero() + ", '" + tyotehtava.getKuvaus() + "' , "
                 + " '" + tyotehtava.getKadunnimi() + "', '" + tyotehtava.getTalonnumero() + "', "
                 + " '" + tyotehtava.getPostinumero() + "', '" + tyotehtava.getPostitoimipaikka() + "', "
                 + " '" + tyotehtava.getAsiakkaanyhteyshenkilo() + "', '" + tyotehtava.getPuhelinnumero() + "', "
-                + " '" + tyotehtava.getVastuuhenkilo() + "' )");
+                + " '" + tyotehtava.getVastuuhenkilo() + "', "
+                + " '" + tyotehtava.getToivepvm() + "' )");
 
 
         yhteys.close();

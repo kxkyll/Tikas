@@ -209,7 +209,8 @@ public class ToimeksiantoServlet extends HttpServlet {
                     String pv = toivepaiva.substring(0, 2);
                     String kk = toivepaiva.substring(2, 4);
                     String vv = toivepaiva.substring(6, 8);
-                    String paiva = "pv" + "/" + "kk" + "/" + vv;
+                    String paiva = pv + "/" + kk + "/" + vv;
+                    System.out.println("päivä: " +paiva);
 //                    Date p = new Date();
 //                    DateFormat formatter = new DateFormat();
 //                    String format = DateFormat.getInstance().format(paiva);
@@ -281,46 +282,6 @@ public class ToimeksiantoServlet extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/tyotehtavat.jsp");
             dispatcher.forward(request, response);
         }
-//        if (request.getParameter("asiakasnumero") != null) {
-//
-//            String asiakas = request.getParameter("asiakasnumero");
-//            System.out.println("asiakas: " + asiakas);
-//            String asiakasnumero = URLEncoder.encode(asiakas, koodaus);
-//            int asiakasnro = Integer.parseInt(asiakasnumero);
-//
-//            try {
-//
-//                a = k.haeAsiakas(asiakasnro);
-//                request.setAttribute("anro", a.getAsiakasnumero());
-//                String nimi = URLDecoder.decode(a.getNimi(), koodaus);
-//                request.setAttribute("animi", nimi);
-//                String katuosoite = URLDecoder.decode(a.getKadunnimi(), koodaus);
-//                String talonumero = URLDecoder.decode(a.getTalonnumero(), koodaus);
-//                request.setAttribute("akatu", katuosoite + " " + talonumero);
-//                String postinumero = URLDecoder.decode(a.getPostinumero(), koodaus);
-//                String postitoimipaikka = URLDecoder.decode(a.getPostitoimipaikka(), koodaus);
-//                request.setAttribute("aposti", postinumero + " " + postitoimipaikka);
-//                String yhteyshenkilo = URLDecoder.decode(a.getYhteyshenkilo(), koodaus);
-//                request.setAttribute("ayhteyshlo", yhteyshenkilo);
-//                String puhelin = URLDecoder.decode(a.getPuhelinnumero(), koodaus);
-//                request.setAttribute("apuhelin", puhelin);
-//
-//                tyotehtavat = k.haeAsiakkaanTyotehtavat(asiakasnro);
-//                request.setAttribute("tyotehtavat", tyotehtavat);
-//            } catch (SQLException ex) {
-//                Logger.getLogger(ToimeksiantoServlet.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//            try {
-//                asiakkaat = k.haeAsiakkaat();
-//                request.setAttribute("asiakkaat", asiakkaat);
-//            } catch (SQLException ex) {
-//                Logger.getLogger(ToimeksiantoServlet.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//
-//
-//            RequestDispatcher dispatcher = request.getRequestDispatcher("/tyotehtavat.jsp");
-//            dispatcher.forward(request, response);
 
-        //}
-//    }
+
 }
