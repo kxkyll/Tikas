@@ -26,6 +26,7 @@ public class Tyotehtava {
     private int asiakasnumero;
     private String tyolaji;
     private String tila;
+    
     private String kuvaus;
     private String kadunnimi;
     private String talonnumero;

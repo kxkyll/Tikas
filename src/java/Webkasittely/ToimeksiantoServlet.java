@@ -159,7 +159,7 @@ public class ToimeksiantoServlet extends HttpServlet {
 
                 String tyotila = URLEncoder.encode(request.getParameter("tyotilavalinta"), koodaus);
 
-                tyotehtava.setKuvaus(tyotila);
+                tyotehtava.setTila(tyotila);
 
             } else {
                 virhe = true;

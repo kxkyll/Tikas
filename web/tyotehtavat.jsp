@@ -10,6 +10,20 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <STYLE type="text/css">
+            input.syote {color:blue}
+            textarea.syote {color:blue}
+            ol { text-align: left;}      
+
+            li {
+                display: table-cell;
+                width: 20em; 
+                padding-right: 5px;
+                padding-left: 5px;
+                border-right: solid 1px;}
+
+        </STYLE>
+
         <title>Tyotehtavat</title>
     </head>
     <body bgcolor="#F8ECE0" background="images/lightgray1.gif" bgproperties ="fixed"> 
@@ -49,16 +63,16 @@
                     </td>
 
                 </tr> 
-                <tr onmousedown= 'alert("onmousedown testausta....")'>
-                    <td width="100%" colspan="3">
-                        <select name="asiakas"  width=100% style="width:700px" size="5" autofocus="true"> 
+                <%-- <tr onmouseclick= "javascript: submitform()">--%>
+                <td width="100%" colspan="3">
+                    <select name="asiakas"  width=100% style="width:700px" size="5" autofocus="true"> 
 
-                            <c:forEach items="${asiakkaat}" var="asiakas">
-                                <option value=${asiakas.asiakasnumero}> ${asiakas.nimi}</option>
-                            </c:forEach>
+                        <c:forEach items="${asiakkaat}" var="asiakas">
+                            <option value=${asiakas.asiakasnumero}> ${asiakas.nimi}</option>
+                        </c:forEach>
 
-                        </select> 
-                    </td>
+                    </select> 
+                </td>
                 <font color="red"> ${virhe}</font>
                 </tr> 
                 <tr>
@@ -76,19 +90,19 @@
                 <tr>
                     <td width= 100% > <text name="asiakasnimi"> ${animi} </td>
                     <td> <text> ${anro}</text> </td>
-                    
-                    <td> <input type="text" name="yhteyshenkilo"  value="${ayhteyshlo}" /> </td>  
-                    
+
+                    <td> <input class="syote" type="text" name="yhteyshenkilo"  value="${ayhteyshlo}" /> </td>  
+
                 </tr>
 
                 <tr> 
                     <th>Katuosoite</th>   <th>Postiosoite</th>    <th>Puhelin</th> 
                 </tr> 
                 <tr> 
-                    <td><input type="text" name="katuosoite" value="${akatu}"/></td>  
-                    <td><input type="text" name="postiosoite"value="${aposti}"/> 
+                    <td><input class="syote" type="text" name="katuosoite" value="${akatu}"/></td>  
+                    <td><input class="syote" type="text" name="postiosoite"value="${aposti}"/> 
 
-                    <td><input type="tel" name="puhelin"value="${apuhelin}"/></td> 
+                    <td><input class="syote" type="tel" name="puhelin"value="${apuhelin}"/></td> 
                 </tr> 
                 <tr>
                     <td height="10" colspan="3">
@@ -101,7 +115,7 @@
                 <tr> 
                     <td><select name="tyolajivalinta"> 
                             <option>Valitse työlaji </option> 
-                            <option value="KON"> Konsultointi </option> 
+                            <option selected ="selected" value="KON"> Konsultointi </option> 
                             <option value="SUU"> Suunnittelu </option> 
                             <option value="TOT"> Toteutus </option> 
                             <option value="YLL"> Ylläpito </option> 
@@ -109,10 +123,10 @@
                     </td>   
                     <td><select name="tyotilavalinta"> 
                             <option>Valitse työn kiireellisyys </option> 
-                            <option value="N"> Normaali </option> 
+                            <option selected ="selected" value="N"> Normaali </option> 
                             <option value="K"> Kiire </option> 
                         </select> 
-                    <td> <input type="date" name="toivepaiva" value="${paiva}"/>  
+                    <td> <input class="syote" type="date" name="toivepaiva" value="${paiva}"/>  
                     </td> 
                 <tr onmousedown='alert("onmousedown effect test....")'> 
                     <td  colspan="3">
@@ -122,8 +136,8 @@
 
                 <tr>
                     <td width=100%>
-                        
-                        <textarea rows="2" cols="115" name ="kuvaus">${tehtavakuvaus} </textarea>
+
+                        <textarea class="syote" rows="2" cols="115" name ="kuvaus">${tehtavakuvaus} </textarea>
 
                     </td>
                 </tr>
@@ -141,17 +155,21 @@
                     <td width="100" rowspan="6" colspan="4">
 
                         <c:forEach items="${tyotehtavat}" var="tyotehtava">
-                            ${tyotehtava.tyonumero}
-                            ${tyotehtava.tila}
-                            ${tyotehtava.kuvaus}
-                            ${tyotehtava.kadunnimi}
-                            ${tyotehtava.talonnumero}
-                            ${tyotehtava.postinumero} 
-                            ${tyotehtava.postitoimipaikka} 
-                            ${tyotehtava.asiakkaanyhteyshenkilo} 
-                            ${tyotehtava.puhelinnumero} 
-                            ${tyotehtava.vastuuhenkilo} 
-                            ${tyotehtava.toivepvm} <br>
+                         
+                            <ol>
+                                <li> ${tyotehtava.tyonumero} </li>
+                                <li> ${tyotehtava.tila} </li>
+                                <li> ${tyotehtava.tyolaji} </li>
+                                <li> ${tyotehtava.kuvaus} </li>
+                                <li> ${tyotehtava.kadunnimi} </li>
+                                <li> ${tyotehtava.talonnumero} </li>
+                                <li> ${tyotehtava.postinumero} </li>
+                                <li> ${tyotehtava.postitoimipaikka} </li>
+                                <li> ${tyotehtava.asiakkaanyhteyshenkilo} </li>
+                                <li> ${tyotehtava.puhelinnumero} </li>
+                                <li> ${tyotehtava.vastuuhenkilo} </li>
+                                <li> ${tyotehtava.toivepvm} </li> <br>
+                                </ol>
                         </c:forEach>
 
                     </td>
@@ -166,4 +184,9 @@
 
     </body>
 </html>
-
+<script type="text/javascript">
+    function submitform()
+    {
+        document.forms.submit();
+    }
+</script>

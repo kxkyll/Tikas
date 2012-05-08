@@ -106,13 +106,17 @@ public class Kantayhteys {
     }
 
     public List<Tyotehtava> haeAsiakkaanTyotehtavat(int asiakas) throws SQLException, UnsupportedEncodingException {
-        System.out.println("haetaan asiakkaan työtehtävät, asiakas: " + asiakas);
+        //System.out.println("haetaan asiakkaan työtehtävät, asiakas: " + asiakas);
         List<Tyotehtava> tyotehtavat = new ArrayList();
         Connection yhteys = luoYhteys();
 
         System.out.println("yhteys luotu");
-        PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select * from asiakas.tyotehtavat where asiakasnumero = ?");
+        //PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select * from asiakas.tyotehtavat where asiakasnumero = ?");
+        PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select * from asiakas.tyotehtavat where asiakasnumero = ? AND tila = ? OR tila = ? order by toivepvm");
         valmisteltuKysely.setInt(1, asiakas);
+        valmisteltuKysely.setString(2, String.valueOf('N'));
+        valmisteltuKysely.setString(3, String.valueOf('K'));
+       
         ResultSet tulosjoukko = valmisteltuKysely.executeQuery();
 //        Statement kysely = yhteys.createStatement();
 //        ResultSet tulosjoukko = kysely.executeQuery("select * from asiakas.tyotehtavat");
@@ -157,13 +161,13 @@ public class Kantayhteys {
                 vastuuhenkilo = URLDecoder.decode(vastuuhenkilo, koodaus);
             }
             Date pvm = tulosjoukko.getDate("toivepvm");
-            System.out.println("pvm: " + pvm);
-            String toivepvm = "14062012";
+            
+            String toivepvm = "";
             if (pvm != null) {
                 DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
                 toivepvm = formatter.format(pvm);
-//            Date toivepvm = tulosjoukko.getDate("toivepvm");
+
             }
 
 
@@ -236,27 +240,9 @@ public class Kantayhteys {
         Connection yhteys = luoYhteys();
 
         Statement kysely = yhteys.createStatement();
-//        kysely.executeUpdate("insert into asiakas.tyotehtavat (asiakasnumero, kuvaus) "
-//                + "values (" + tyotehtava.getAsiakasnumero() + ", '" + tyotehtava.getKuvaus() + "')");
-//        tyonumero serial PRIMARY KEY,
-//        asiakasnumero int,
-//        tyolaji char (3), -- KON,YLL,SUU,TOT
-//        tila char (1), -- N, K, L, P, V
-//        kuvaus varchar (100),
-//        kadunnimi varchar (50),
-//        talonnumero varchar (10),
-//        postinumero varchar (10),
-//        postitoimipaikka varchar (15),
-//        asiakkaanyhteyshenkilo varchar (25),
-//        puhelinnumero varchar (15),
-//        vastuuhenkilo varchar (25),
-//        toivepvm date,
 
-        // Päivämäärän tallettaminen puuttuu vielä !!!
-        // ja tila ja tyolaji
-        //  +tyotehtava.getTyolaji().substring(0, 2) + "', '"
         String aputyolaji = tyotehtava.getTyolaji();
-        System.out.println("aputyolaji: " + aputyolaji);
+//        System.out.println("aputyolaji: " + aputyolaji);
         String tyolaji = "";
         if (aputyolaji.contentEquals("KON")) {
             tyolaji = "KON";
@@ -270,15 +256,18 @@ public class Kantayhteys {
         if (aputyolaji.contentEquals("YLL")) {
             tyolaji = "YLL";
         }
-        String aputila = tyotehtava.getTyolaji();
-        char tila = 'N';
-        if (aputila.contentEquals("K")) {
-            tila = 'K';
-        }
-        if (aputila.contentEquals("N")) {
-            tila = 'N';
-        }
-        System.out.println("tila: " + tila + "työlaji: " + tyolaji);
+//        System.out.println("tila: " +tyotehtava.getTila());
+//        System.out.println("tilan eka: "+tyotehtava.getTila().charAt(0));
+//        
+//        String aputila = tyotehtava.getTyolaji();
+//        char tila = 'N';
+//        if (aputila.contentEquals("K")) {
+//            tila = 'K';
+//        }
+//        if (aputila.contentEquals("N")) {
+//            tila = 'N';
+//        }
+  //      System.out.println("tila: " + tila + "työlaji: " + tyolaji);
 
 
 
@@ -288,12 +277,13 @@ public class Kantayhteys {
         kysely.executeUpdate("insert into asiakas.tyotehtavat "
                 + "(asiakasnumero, kuvaus, kadunnimi, talonnumero, "
                 + "postinumero, postitoimipaikka, asiakkaanyhteyshenkilo, "
-                + "puhelinnumero, vastuuhenkilo, toivepvm) "
+                + "puhelinnumero, vastuuhenkilo,tila, toivepvm) "
                 + "values (" + tyotehtava.getAsiakasnumero() + ", '" + tyotehtava.getKuvaus() + "' , "
                 + " '" + tyotehtava.getKadunnimi() + "', '" + tyotehtava.getTalonnumero() + "', "
                 + " '" + tyotehtava.getPostinumero() + "', '" + tyotehtava.getPostitoimipaikka() + "', "
                 + " '" + tyotehtava.getAsiakkaanyhteyshenkilo() + "', '" + tyotehtava.getPuhelinnumero() + "', "
                 + " '" + tyotehtava.getVastuuhenkilo() + "', "
+                + " '" + tyotehtava.getTila().charAt(0) + "', "
                 + " '" + tyotehtava.getToivepvm() + "' )");
 
 
