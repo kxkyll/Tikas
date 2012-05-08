@@ -14,7 +14,7 @@
     </head>
     <body bgcolor="#F8ECE0" background="images/lightgray1.gif" bgproperties ="fixed"> 
 
-        <form method="post">
+        <form id ="tehtavat" action="" method="post">
             <table width=100% border="2" bgcolor="#BDBDBD" align="left"> 
                 <tr>
                     <td> <font face="MATISSE ITC" size="8" color="black">Työtehtävien kirjausjärjestelmä</font>
@@ -23,7 +23,7 @@
 
                         <font color="blue"> Olet kirjautunut käyttäjätunnuksella: ${ktunnus} 
                         <a href="Login" target="">Kirjaudu ulos</a></font>
-                        
+
                     </td>
                 </tr>
 
@@ -51,7 +51,7 @@
                 </tr> 
                 <tr onmousedown= 'alert("onmousedown testausta....")'>
                     <td width="100%" colspan="3">
-                        <select name="asiakas" width=100% size="5" autofocus="true"> 
+                        <select name="asiakas"  width=100% style="width:700px" size="5" autofocus="true"> 
 
                             <c:forEach items="${asiakkaat}" var="asiakas">
                                 <option value=${asiakas.asiakasnumero}> ${asiakas.nimi}</option>
@@ -59,15 +59,16 @@
 
                         </select> 
                     </td>
-                    
+                <font color="red"> ${virhe}</font>
                 </tr> 
                 <tr>
                     <td colspan ="3">
 
                         <input type="submit" name="haeAsiakas" value="Hae asiakastiedot"/>
                         <input type="hidden" name="asiakasnumero"value="${anro}"/>   
+                        <input type="hidden" name="nimi"value="${animi}"/>   
                     </td>
-                     
+
                 </tr>
 
                 <th >Asiakkaan nimi</th>   <th>Asiakasnumero</th> <th>Yhteyshenkilö</th>
@@ -75,7 +76,9 @@
                 <tr>
                     <td width= 100% > <text name="asiakasnimi"> ${animi} </td>
                     <td> <text> ${anro}</text> </td>
-                    <td><input type="text" name="yhteyshenkilo"value="${ayhteyshlo}"/></td>   
+                    
+                    <td> <input type="text" name="yhteyshenkilo"  value="${ayhteyshlo}" /> </td>  
+                    
                 </tr>
 
                 <tr> 
@@ -109,7 +112,7 @@
                             <option value="N"> Normaali </option> 
                             <option value="K"> Kiire </option> 
                         </select> 
-                    <td> <input type="date" name="toivepaiva"   
+                    <td> <input type="date" name="toivepaiva" value="${paiva}"/>  
                     </td> 
                 <tr onmousedown='alert("onmousedown effect test....")'> 
                     <td  colspan="3">
@@ -118,8 +121,9 @@
                 </tr>
 
                 <tr>
-                    <td width="100" rowspan="2" colspan="3">
-                        <textarea rows="10" cols="57" name ="kuvaus"> </textarea>
+                    <td width=100%>
+                        
+                        <textarea rows="2" cols="115" name ="kuvaus">${tehtavakuvaus} </textarea>
 
                     </td>
                 </tr>
@@ -128,11 +132,12 @@
                     <td>
 
                         <input type="submit" name="lisaaTyo" value="Lisää tyotehtava"/>
+                        <BUTTON name="reset" value ="peruuta">Peruuta</BUTTON>
                     </td>
-                    <font color="red"> ${virhe}</font>
+                <font color="red"> ${virhe}</font>
                 </tr>
                 <tr> <td> Asiakkaan kaikki työtehtävät </td> </tr>
-                <tr>
+                <tr onmouseup= 'alert ("hiiri alas")'>
                     <td width="100" rowspan="6" colspan="4">
 
                         <c:forEach items="${tyotehtavat}" var="tyotehtava">
