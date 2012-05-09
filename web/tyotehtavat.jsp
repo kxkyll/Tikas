@@ -21,6 +21,34 @@
                 padding-right: 5px;
                 padding-left: 5px;
                 border-right: solid 1px;}
+            #tehtavat
+            {
+                font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+                width:100%;
+                border-collapse:collapse;
+            }
+            #tehtavat td, #tehtavat th 
+            {
+                font-size:14px;
+                border:1px solid #1F1F14;
+                padding:3px 7px 2px 7px;
+            }
+            #tehtavat th 
+            {
+                font-size:14px;
+                text-align:left;
+                padding-top:5px;
+                padding-bottom:4px;
+                
+                background-color:#BDBDBD;
+                color:#1F1F14;
+            }
+            #tehtavat tr.alt td 
+            {
+                color:#000000;
+                background-color:#EAF2D3;
+            }
+
 
         </STYLE>
 
@@ -29,7 +57,7 @@
     <body bgcolor="#F8ECE0" background="images/lightgray1.gif" bgproperties ="fixed"> 
 
         <form id ="tehtavat" action="" method="post">
-            <table width=100% border="2" bgcolor="#BDBDBD" align="left"> 
+            <table id="tiedot" width=100% border="2" bgcolor="#BDBDBD" align="left"> 
                 <tr>
                     <td> <font face="MATISSE ITC" size="8" color="black">Työtehtävien kirjausjärjestelmä</font>
                     </td>
@@ -50,8 +78,9 @@
                     <td height="25" width="150" bgcolor="#FAFAFA" align="center">
                         Lisää työtehtävä
                     </td>
-                    <td height="20" width="150" bgcolor="#BDBDBD" align="center">
-                        Lisää työtunteja
+                    <td height="20" width="150" bgcolor="#BDBDBD" align="center" >
+                        <input type="submit" name="siirryTunnit" value="Lisää työtunteja"/>
+                        
                     </td>
                 </tr>
             </table>
@@ -150,39 +179,50 @@
                     </td>
                 <font color="red"> ${virhe}</font>
                 </tr>
-                <tr> <td> Asiakkaan kaikki työtehtävät </td> </tr>
+                <tr> <td width=100% colspan="3"> Asiakkaan kaikki työtehtävät </td> </tr>
                 <tr onmouseup= 'alert ("hiiri alas")'>
-                    <td width="100" rowspan="6" colspan="4">
 
-                        <c:forEach items="${tyotehtavat}" var="tyotehtava">
-                         
-                            <ol>
-                                <li> ${tyotehtava.tyonumero} </li>
-                                <li> ${tyotehtava.tila} </li>
-                                <li> ${tyotehtava.tyolaji} </li>
-                                <li> ${tyotehtava.kuvaus} </li>
-                                <li> ${tyotehtava.kadunnimi} </li>
-                                <li> ${tyotehtava.talonnumero} </li>
-                                <li> ${tyotehtava.postinumero} </li>
-                                <li> ${tyotehtava.postitoimipaikka} </li>
-                                <li> ${tyotehtava.asiakkaanyhteyshenkilo} </li>
-                                <li> ${tyotehtava.puhelinnumero} </li>
-                                <li> ${tyotehtava.vastuuhenkilo} </li>
-                                <li> ${tyotehtava.toivepvm} </li> <br>
-                                </ol>
-                        </c:forEach>
 
-                    </td>
+                <tr>        
+                    <td width=100% colspan="3"> <table id="tehtavat">
+                            <th>Nro</th>
+                            <th>Tila</th>
+                            <th>Laji</th>
+                            <th>Kuvaus</th>
+                            <th>Katusoite</th>
+                            <th>Postiosoite</th>
+                            <th>Yhteyshenkilo</th>
+                            <th>Puhelinnumero</th>
+                            <th>Vastuuhenkilö</th>
+                            <th>Toivepvm</th>
+
                 </tr>
-            </table>  
+
+                <c:forEach items="${tyotehtavat}" var="tyotehtava">
+                    <tr>
+                        <td>${tyotehtava.tyonumero}</td>
+                        <td>${tyotehtava.tila}</td>
+                        <td>${tyotehtava.tyolaji}</td>
+                        <td>${tyotehtava.kuvaus}</td>
+                        <td>${tyotehtava.kadunnimi} ${tyotehtava.talonnumero}</td>
+                        <td>${tyotehtava.postinumero} ${tyotehtava.postitoimipaikka}</td>
+                        <td>${tyotehtava.asiakkaanyhteyshenkilo}</td>
+                        <td>${tyotehtava.puhelinnumero}</td>
+                        <td>${tyotehtava.vastuuhenkilo}</td>
+                        <td>${tyotehtava.toivepvm}</td>
+                    </tr>
+                </c:forEach>
+            </table> </td>
+
+    </table>
 
 
-        </form>
+</form>
 
-        <br>
+<br>
 
 
-    </body>
+</body>
 </html>
 <script type="text/javascript">
     function submitform()

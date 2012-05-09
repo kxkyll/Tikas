@@ -84,14 +84,24 @@ public class ToimeksiantoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, UnsupportedEncodingException {
-        System.out.println("doPost");
+        System.out.println("Toimeksianto: doPost");
         List<Tyotehtava> tyotehtavat = null;
         List<Asiakas> asiakkaat = null;
 
         Asiakas a;
         String erotin = "\\+";
         Boolean virhe = false;
+        if (request.getParameter("siirryTunnit") != null) {
+            System.out.println("Toimeksianto: siirryTunnit");
+            response.setContentType("text/html;charset=UTF-8");
+            response.sendRedirect(request.getContextPath() + "/Tyotunnit");
 
+            response.flushBuffer();
+            return;
+//            RequestDispatcher dispatcher = request.getRequestDispatcher("/tyotunnit.jsp");
+//            dispatcher.forward(request, response);
+//            return;
+        }
         if (request.getParameter("haeAsiakas") != null) {
             String asiakas = (request.getParameter("asiakas"));
             System.out.println("asiakas: " + asiakas);
@@ -292,7 +302,7 @@ public class ToimeksiantoServlet extends HttpServlet {
                 }
 
 
-
+                response.setContentType("text/html;charset=UTF-8");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/tyotehtavat.jsp");
                 dispatcher.forward(request, response);
                 return;
@@ -354,7 +364,7 @@ public class ToimeksiantoServlet extends HttpServlet {
             Logger.getLogger(ToimeksiantoServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-
+        response.setContentType("text/html;charset=UTF-8");
         RequestDispatcher dispatcher = request.getRequestDispatcher("/tyotehtavat.jsp");
         dispatcher.forward(request, response);
         return;
@@ -381,3 +391,28 @@ public class ToimeksiantoServlet extends HttpServlet {
 //
 //    }
 }
+//                <tr> <td> Asiakkaan kaikki työtehtävät </td> </tr>
+//                <tr onmouseup= 'alert ("hiiri alas")'>
+//                    <td width="100" rowspan="6" colspan="4">
+//                        <font face="Courier">
+//                        <c:forEach items="${tyotehtavat}" var="tyotehtava">
+//
+//                            <ol>
+//                                <li> ${tyotehtava.tyonumero} </li>
+//                                <li> ${tyotehtava.tila} </li>
+//                                <li> ${tyotehtava.tyolaji} </li>
+//                                <li> ${tyotehtava.kuvaus} </li>
+//                                <li> ${tyotehtava.kadunnimi} </li>
+//                                <li> ${tyotehtava.talonnumero} </li>
+//                                <li> ${tyotehtava.postinumero} </li>
+//                                <li> ${tyotehtava.postitoimipaikka} </li>
+//                                <li> ${tyotehtava.asiakkaanyhteyshenkilo} </li>
+//                                <li> ${tyotehtava.puhelinnumero} </li>
+//                                <li> ${tyotehtava.vastuuhenkilo} </li>
+//                                <li> ${tyotehtava.toivepvm} </li> <br>
+//                            </ol>
+//                        </c:forEach>
+//                        </font>
+//                    </td>
+//                </tr>
+//            </table>  

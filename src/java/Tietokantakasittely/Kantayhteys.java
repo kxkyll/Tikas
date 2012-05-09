@@ -55,6 +55,7 @@ public class Kantayhteys {
             return DriverManager.getConnection(osoite, kayttajatunnus, salasana);
         } else {
             return DriverManager.getConnection(osoite, userskayttajatunnus, userssalasana);
+
         }
     }
 
@@ -106,17 +107,17 @@ public class Kantayhteys {
     }
 
     public List<Tyotehtava> haeAsiakkaanTyotehtavat(int asiakas) throws SQLException, UnsupportedEncodingException {
-        //System.out.println("haetaan asiakkaan työtehtävät, asiakas: " + asiakas);
+
         List<Tyotehtava> tyotehtavat = new ArrayList();
         Connection yhteys = luoYhteys();
 
         System.out.println("yhteys luotu");
-        //PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select * from asiakas.tyotehtavat where asiakasnumero = ?");
-        PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select * from asiakas.tyotehtavat where asiakasnumero = ? AND tila = ? OR tila = ? order by toivepvm");
+        PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select * from asiakas.tyotehtavat where asiakasnumero = ? order by toivepvm");
+        //PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select * from asiakas.tyotehtavat where asiakasnumero = ? AND tila = ? order by toivepvm");
         valmisteltuKysely.setInt(1, asiakas);
-        valmisteltuKysely.setString(2, String.valueOf('N'));
-        valmisteltuKysely.setString(3, String.valueOf('K'));
-       
+        //valmisteltuKysely.setString(2, String.valueOf('N'));
+        //valmisteltuKysely.setString(3, String.valueOf('K'));
+
         ResultSet tulosjoukko = valmisteltuKysely.executeQuery();
 //        Statement kysely = yhteys.createStatement();
 //        ResultSet tulosjoukko = kysely.executeQuery("select * from asiakas.tyotehtavat");
@@ -161,7 +162,7 @@ public class Kantayhteys {
                 vastuuhenkilo = URLDecoder.decode(vastuuhenkilo, koodaus);
             }
             Date pvm = tulosjoukko.getDate("toivepvm");
-            
+
             String toivepvm = "";
             if (pvm != null) {
                 DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -179,6 +180,74 @@ public class Kantayhteys {
 
         yhteys.close();
         return tyotehtavat;
+    }
+
+    public Tyotehtava haeTyotehtava(int tyonro) throws SQLException, UnsupportedEncodingException {
+        Connection yhteys = luoYhteys();
+        Tyotehtava t = null;
+        System.out.println("yhteys luotu");
+        PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select * from asiakas.tyotehtavat where tyonumero = ?");
+        valmisteltuKysely.setInt(1, tyonro);
+        ResultSet tulosjoukko = valmisteltuKysely.executeQuery();
+
+        while (tulosjoukko.next()) {
+            int tyonumero = tulosjoukko.getInt("tyonumero");
+            System.out.println("työnumero: " + tyonumero);
+            int asiakasnumero = tulosjoukko.getInt("asiakasnumero");
+            String tyolaji = tulosjoukko.getString("tyolaji");
+            String tila = tulosjoukko.getString("tila");
+            String kuvaus = tulosjoukko.getString("kuvaus");
+            if (kuvaus != null) {
+                kuvaus = URLDecoder.decode(kuvaus, koodaus);
+            }
+            String kadunnimi = tulosjoukko.getString("kadunnimi");
+            if (kadunnimi != null) {
+                kadunnimi = URLDecoder.decode(kadunnimi, koodaus);
+            }
+            String talonnumero = tulosjoukko.getString("talonnumero");
+            if (talonnumero != null) {
+                talonnumero = URLDecoder.decode(talonnumero, koodaus);
+            }
+            String postinumero = tulosjoukko.getString("postinumero");
+            if (postinumero != null) {
+                postinumero = URLDecoder.decode(postinumero, koodaus);
+            }
+            String postitoimipaikka = tulosjoukko.getString("postitoimipaikka");
+            if (postitoimipaikka != null) {
+                postitoimipaikka = URLDecoder.decode(postitoimipaikka, koodaus);
+            }
+            String asiakkaanyhteyshenkilo = tulosjoukko.getString("asiakkaanyhteyshenkilo");
+            if (asiakkaanyhteyshenkilo != null) {
+                asiakkaanyhteyshenkilo = URLDecoder.decode(asiakkaanyhteyshenkilo, koodaus);
+            }
+
+            String puhelinnumero = tulosjoukko.getString("puhelinnumero");
+            if (puhelinnumero != null) {
+                puhelinnumero = URLDecoder.decode(puhelinnumero, koodaus);
+            }
+            String vastuuhenkilo = tulosjoukko.getString("vastuuhenkilo");
+            if (vastuuhenkilo != null) {
+                vastuuhenkilo = URLDecoder.decode(vastuuhenkilo, koodaus);
+            }
+            Date pvm = tulosjoukko.getDate("toivepvm");
+
+            String toivepvm = "";
+            if (pvm != null) {
+                DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+                toivepvm = formatter.format(pvm);
+
+            }
+
+
+            t = new Tyotehtava(tyonumero, asiakasnumero, tyolaji, tila,
+                    kuvaus, kadunnimi, talonnumero, postinumero, postitoimipaikka,
+                    asiakkaanyhteyshenkilo, puhelinnumero, vastuuhenkilo, toivepvm); // lisää parametrit
+
+
+        }
+        yhteys.close();
+        return t;
     }
 
     public List<Tyotehtava> haeTyotehtavat() throws SQLException, UnsupportedEncodingException {
@@ -242,7 +311,7 @@ public class Kantayhteys {
         Statement kysely = yhteys.createStatement();
 
         String aputyolaji = tyotehtava.getTyolaji();
-//        System.out.println("aputyolaji: " + aputyolaji);
+        System.out.println("aputyolaji: " + aputyolaji);
         String tyolaji = "";
         if (aputyolaji.contentEquals("KON")) {
             tyolaji = "KON";
@@ -267,7 +336,7 @@ public class Kantayhteys {
 //        if (aputila.contentEquals("N")) {
 //            tila = 'N';
 //        }
-  //      System.out.println("tila: " + tila + "työlaji: " + tyolaji);
+        //      System.out.println("tila: " + tila + "työlaji: " + tyolaji);
 
 
 
@@ -414,10 +483,29 @@ public class Kantayhteys {
 
         while (tulosjoukko.next()) {
             vastuuhenkilo = tulosjoukko.getString("nimi");
-            
+
         }
 
         yhteys.close();
         return vastuuhenkilo;
+    }
+
+    public String haeAsiakkaanNimi(int asnro) throws SQLException {
+        String nimi = "";
+        Connection yhteys = luoYhteys();
+
+        System.out.println("yhteys luotu");
+        PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select nimi from asiakas.asiakkaat where asiakasnumero = ?");
+        valmisteltuKysely.setInt(1, asnro);
+        ResultSet tulosjoukko = valmisteltuKysely.executeQuery();
+
+        while (tulosjoukko.next()) {
+            nimi = tulosjoukko.getString("nimi");
+
+        }
+
+        yhteys.close();
+        return nimi;
+
     }
 }
