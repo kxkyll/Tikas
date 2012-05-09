@@ -157,7 +157,7 @@ public class Tyotunnit extends HttpServlet {
         if (request.getParameter("haeAsiakkaanTehtavat") != null) {
             String asiakas = (request.getParameter("asiakas"));
             System.out.println("asiakas: " + asiakas);
-            request.setAttribute("asiakasnumero", asiakas);
+            request.setAttribute("anro", asiakas);
 
 
             if (asiakas != null) {
@@ -188,15 +188,16 @@ public class Tyotunnit extends HttpServlet {
             if (tehtava != null) {
                 String asiakas = (request.getParameter("asiakasnumero"));
                 System.out.println("asiakasnumero: " +asiakas);
-                //int asiakasnumero = Integer.parseInt(asiakas);
+                int asiakasnumero = Integer.parseInt(asiakas);
+                request.setAttribute("anro", asiakas);
                 int tehtavanro = Integer.parseInt(tehtava);
                 System.out.println("tehtavanro: " + tehtavanro);
                 try {
                     t = k.haeTyotehtava(tehtavanro);
                     request.setAttribute("tehtavanTiedot", t);
-                  //  tyotehtavat = k.haeAsiakkaanTyotehtavat(asiakasnumero);
-                  //  String animi = k.haeAsiakkaanNimi(asiakasnumero);
-                  //  request.setAttribute("animi", animi);
+                    tyotehtavat = k.haeAsiakkaanTyotehtavat(asiakasnumero);
+                    String animi = k.haeAsiakkaanNimi(asiakasnumero);
+                    request.setAttribute("animi", animi);
 
                     request.setAttribute("tyotehtavat", tyotehtavat);
                 } catch (SQLException ex) {
