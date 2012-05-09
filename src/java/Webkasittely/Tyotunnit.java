@@ -96,6 +96,15 @@ public class Tyotunnit extends HttpServlet {
             if ((session.getAttribute("ktunnus") != null || session.getAttribute("salasana") != null)) {
                 String kayttaja = (String) session.getAttribute("ktunnus");
                 request.setAttribute("ktunnus", kayttaja);
+                String tyontekija;
+                try {
+                    tyontekija = k.haeTyontekija(kayttaja);
+                    System.out.println("työntekijä:" +tyontekija);
+                    request.setAttribute("tekija", tyontekija);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Tyotunnit.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
                 System.out.println("tunnukset sessiolla");
             } else {
                 System.out.println("kayttaja ei ole antanut käyttäjätunnusta "
@@ -143,6 +152,7 @@ public class Tyotunnit extends HttpServlet {
         Tyotehtava t;
         String erotin = "\\+";
         Boolean virhe = false;
+        
         if (request.getParameter("siirryTehtavat") != null) {
             System.out.println("Tyotunnit: siirryTehtavat");
             response.setContentType("text/html;charset=UTF-8");
@@ -150,10 +160,9 @@ public class Tyotunnit extends HttpServlet {
 
             response.flushBuffer();
             return;
-//            RequestDispatcher dispatcher = request.getRequestDispatcher("/tyotunnit.jsp");
-//            dispatcher.forward(request, response);
-//            return;
+
         }
+        
         if (request.getParameter("haeAsiakkaanTehtavat") != null) {
             String asiakas = (request.getParameter("asiakas"));
             System.out.println("asiakas: " + asiakas);
@@ -187,10 +196,11 @@ public class Tyotunnit extends HttpServlet {
 
             if (tehtava != null) {
                 String asiakas = (request.getParameter("asiakasnumero"));
-                System.out.println("asiakasnumero: " +asiakas);
+                System.out.println("asiakasnumero: " + asiakas);
                 int asiakasnumero = Integer.parseInt(asiakas);
                 request.setAttribute("anro", asiakas);
                 int tehtavanro = Integer.parseInt(tehtava);
+                request.setAttribute("tnro", tehtavanro);
                 System.out.println("tehtavanro: " + tehtavanro);
                 try {
                     t = k.haeTyotehtava(tehtavanro);
@@ -207,6 +217,15 @@ public class Tyotunnit extends HttpServlet {
 
             }
         }
+        if (request.getParameter("lisaaTunnit") != null) {
+            String asiakas = (request.getParameter("asiakasnumero"));
+            String tehtava = (request.getParameter("tehtavanumero"));
+            String tekija = (request.getParameter("tekija"));
+            String tuntimaara = (request.getParameter("tunnit"));
+            Double tunnit = Double.parseDouble(tuntimaara);
+            
+            
+        }
         try {
 
             asiakkaat = k.haeAsiakkaat();
@@ -215,6 +234,9 @@ public class Tyotunnit extends HttpServlet {
         } catch (SQLException e) {
             throw new ServletException(e);
         }
+        String tekija = (request.getParameter("tekija"));
+        request.setAttribute("tekija", tekija);
+        
         response.setContentType("text/html;charset=UTF-8");
         RequestDispatcher dispatcher = request.getRequestDispatcher("/tyotunnit.jsp");
         dispatcher.forward(request, response);

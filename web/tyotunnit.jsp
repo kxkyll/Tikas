@@ -141,7 +141,8 @@
 
                     </tr>
                     <tr>        
-                        <td width=100% colspan="3"> <table id="tehtavat">
+                        <td width=100% colspan="3"> 
+                            <table id="tehtavat">
                                 <th>Nro</th>
                                 <th>Tila</th>
                                 <th>Laji</th>
@@ -170,5 +171,28 @@
                     </tr>
 
                 </table> </td>
+                <tr>        
+                    <td width=100%> <input type="text" name="tehtavanumero" value=${tnro}>
+                        <table id="tunnit">
+                            <th>Tuntia (hh.mm) </th>
+                            <th>Tekijä</th>
 
-            </table>
+                </tr>
+
+
+                <tr>
+                    <c:forEach items="${tyot}" var="tyo">
+                        <td>${tyo.tunnit}</td>
+                        <td>${tyo.henkilo}</td>
+                    </c:forEach>
+                    <td><input type="time" name="tunnit"></td>
+                        <td>${tekija}</td>
+                </tr>
+                <tr> <td colspan="2">
+                <input type="submit" name="lisaaTunnit" value="Lisää työtunnit"/>
+                <input type="hidden" name="tekija" value ="${tekija}"/>
+                    </td>
+                </tr>
+            </table> </td>
+
+    </table>
