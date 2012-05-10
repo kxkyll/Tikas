@@ -310,49 +310,20 @@ public class Kantayhteys {
 
         Statement kysely = yhteys.createStatement();
 
-        String aputyolaji = tyotehtava.getTyolaji();
-        System.out.println("aputyolaji: " + aputyolaji);
-        String tyolaji = "";
-        if (aputyolaji.contentEquals("KON")) {
-            tyolaji = "KON";
-        }
-        if (aputyolaji.contentEquals("SUU")) {
-            tyolaji = "SUU";
-        }
-        if (aputyolaji.contentEquals("TOT")) {
-            tyolaji = "TOT";
-        }
-        if (aputyolaji.contentEquals("YLL")) {
-            tyolaji = "YLL";
-        }
-//        System.out.println("tila: " +tyotehtava.getTila());
-//        System.out.println("tilan eka: "+tyotehtava.getTila().charAt(0));
-//        
-//        String aputila = tyotehtava.getTyolaji();
-//        char tila = 'N';
-//        if (aputila.contentEquals("K")) {
-//            tila = 'K';
-//        }
-//        if (aputila.contentEquals("N")) {
-//            tila = 'N';
-//        }
-        //      System.out.println("tila: " + tila + "työlaji: " + tyolaji);
-
-
-
-//        
-//        String tyolaji = aputyolaji.substring(0,2);
+//        String aputyolaji = tyotehtava.getTyolaji();
+//        System.out.println("aputyolaji: " + aputyolaji);
 
         kysely.executeUpdate("insert into asiakas.tyotehtavat "
                 + "(asiakasnumero, kuvaus, kadunnimi, talonnumero, "
                 + "postinumero, postitoimipaikka, asiakkaanyhteyshenkilo, "
-                + "puhelinnumero, vastuuhenkilo,tila, toivepvm) "
+                + "puhelinnumero, vastuuhenkilo,tila, tyolaji, toivepvm) "
                 + "values (" + tyotehtava.getAsiakasnumero() + ", '" + tyotehtava.getKuvaus() + "' , "
                 + " '" + tyotehtava.getKadunnimi() + "', '" + tyotehtava.getTalonnumero() + "', "
                 + " '" + tyotehtava.getPostinumero() + "', '" + tyotehtava.getPostitoimipaikka() + "', "
                 + " '" + tyotehtava.getAsiakkaanyhteyshenkilo() + "', '" + tyotehtava.getPuhelinnumero() + "', "
                 + " '" + tyotehtava.getVastuuhenkilo() + "', "
                 + " '" + tyotehtava.getTila().charAt(0) + "', "
+                + " '" + tyotehtava.getTyolaji().substring(0, 3) + "', "
                 + " '" + tyotehtava.getToivepvm() + "' )");
 
 
@@ -489,6 +460,26 @@ public class Kantayhteys {
         yhteys.close();
         return vastuuhenkilo;
     }
+    
+    public int haeHenkilonumeroNimella(String tekija) throws SQLException {
+        int henkilonumero = 0;
+        Connection yhteys = luoYhteys();
+
+        System.out.println("yhteys luotu");
+        PreparedStatement valmisteltuKysely = yhteys.prepareStatement("select henkilonumero from asiakas.tyontekijat where nimi = ?");
+        valmisteltuKysely.setString(1, tekija);
+        
+
+        ResultSet tulosjoukko = valmisteltuKysely.executeQuery();
+
+        while (tulosjoukko.next()) {
+            henkilonumero = tulosjoukko.getInt("henkilonumero");
+        
+        }
+
+        yhteys.close();
+        return henkilonumero;
+    }
 
     public String haeAsiakkaanNimi(int asnro) throws SQLException {
         String nimi = "";
@@ -508,4 +499,70 @@ public class Kantayhteys {
         return nimi;
 
     }
+    public List<Tyotunti> haeTyotehtavanTunnit(int asiakas, int tyotehtava) throws SQLException, UnsupportedEncodingException {
+        System.out.println("haeTyotehtavanTunnit");
+        List<Tyotunti> tehdytMinuutit = new ArrayList();
+        Connection yhteys = luoYhteys();
+
+        System.out.println("yhteys luotu");
+        PreparedStatement valmisteltuKysely = yhteys.prepareStatement
+                ("select * from asiakas.tyotunnit where asiakasnumero = ? "
+                + "and tyonumero = ?");
+        
+        valmisteltuKysely.setInt(1, asiakas);
+        valmisteltuKysely.setInt(2, tyotehtava);
+        System.out.println("asiakas: "+asiakas);
+        System.out.println("tyotehtava: "+tyotehtava);
+        ResultSet tulosjoukko = valmisteltuKysely.executeQuery();
+        int i=1;
+        while (tulosjoukko.next()) {
+            System.out.println("i: "+i);
+            i++;
+            int asiakasnumero = tulosjoukko.getInt("asiakasnumero");
+            int tyonumero = tulosjoukko.getInt("tyonumero");
+            int henkilonumero = tulosjoukko.getInt("henkilonumero");
+            int minuutit = tulosjoukko.getInt("minuutit");
+            
+
+            Tyotunti tt = new Tyotunti(asiakasnumero, tyonumero, henkilonumero, minuutit); 
+            tehdytMinuutit.add(tt);
+        }
+
+        yhteys.close();
+        return tehdytMinuutit;
+    }
+
+    public void lisaaTyotunnit(Tyotunti tt) throws SQLException {
+           System.out.println("lisätään työtunnit");
+        Connection yhteys = luoYhteys();
+        
+        PreparedStatement valmisteltuKysely = yhteys.prepareStatement("update asiakas.tyotunnit SET minuutit =  minuutit + ? WHERE asiakasnumero = ? AND tyonumero = ? AND henkilonumero = ?");
+        //valmisteltuKysely.setDouble(1, tt.getMinuutit()*1.0);
+        valmisteltuKysely.setInt(1, tt.getMinuutit());
+        valmisteltuKysely.setInt(2, tt.getAsiakasnumero());
+        valmisteltuKysely.setInt(3, tt.getTyonumero());
+        valmisteltuKysely.setInt(4, tt.getHenkilonumero());
+
+        int resultUpdate = valmisteltuKysely.executeUpdate();
+        System.out.println("update tietuieita: "+resultUpdate);
+        // update palauttaa tiedon kuinka monta tietuetta päivitettiin
+        if (resultUpdate > 0) {
+            yhteys.close();
+            return;
+        }
+                
+        Statement kysely = yhteys.createStatement();
+        int resultInsert = kysely.executeUpdate("insert into asiakas.tyotunnit "
+                                    + "(asiakasnumero, tyonumero, henkilonumero, minuutit) "
+                                    + "values (" + tt.getAsiakasnumero() + ", " + tt.getTyonumero() 
+                                    +", " +tt.getHenkilonumero() + ", " + tt.getMinuutit()*1.0 +")");
+        System.out.println("insert palautti: "+resultInsert );
+
+        yhteys.close();
+
+        
+    }
+
+    
+
 }

@@ -116,7 +116,7 @@ public class Login extends HttpServlet {
                         session.setAttribute("ktunnus", ktunnus);
                         //session.setAttribute("salasana", salasana);
 
-                        response.sendRedirect(request.getContextPath() + "/Toimeksianto");
+                        response.sendRedirect(request.getContextPath() + "/Tyotehtavat");
 
                         response.flushBuffer();
                         return;

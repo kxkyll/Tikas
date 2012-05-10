@@ -13,7 +13,19 @@ public class Tyotunti {
     private int asiakasnumero;
     private int tyonumero;
     private int henkilonumero;
-    private double tuntimaara;
+    private int minuutit;
+
+    public Tyotunti() {
+    }
+
+    
+    public Tyotunti(int asiakasnumero, int tyonumero, int henkilonumero, int minuutit) {
+        this.asiakasnumero = asiakasnumero;
+        this.tyonumero = tyonumero;
+        this.henkilonumero = henkilonumero;
+        this.minuutit = minuutit;
+    }
+
 
     public int getAsiakasnumero() {
         return asiakasnumero;
@@ -23,8 +35,8 @@ public class Tyotunti {
         return henkilonumero;
     }
 
-    public double getTuntimaara() {
-        return tuntimaara;
+    public int getMinuutit() {
+        return minuutit;
     }
 
     public int getTyonumero() {
@@ -39,8 +51,8 @@ public class Tyotunti {
         this.henkilonumero = henkilonumero;
     }
 
-    public void setTuntimaara(double tuntimaara) {
-        this.tuntimaara = tuntimaara;
+    public void setMinuutit(int minuutit) {
+        this.minuutit = minuutit;
     }
 
     public void setTyonumero(int tyonumero) {

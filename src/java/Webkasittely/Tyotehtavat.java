@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class ToimeksiantoServlet extends HttpServlet {
+public class Tyotehtavat extends HttpServlet {
 
     String koodaus = "UTF-8";
     private Kantayhteys k = new Kantayhteys();
@@ -84,7 +84,7 @@ public class ToimeksiantoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, UnsupportedEncodingException {
-        System.out.println("Toimeksianto: doPost");
+        System.out.println("Tyotehtavat: doPost");
         List<Tyotehtava> tyotehtavat = null;
         List<Asiakas> asiakkaat = null;
 
@@ -93,7 +93,7 @@ public class ToimeksiantoServlet extends HttpServlet {
         Boolean virhe = false;
         request.setCharacterEncoding("UTF8");
         if (request.getParameter("siirryTunnit") != null) {
-            System.out.println("Toimeksianto: siirryTunnit");
+            System.out.println("Tyotehtavat: siirryTunnit");
             response.setContentType("text/html;charset=UTF-8");
             response.sendRedirect(request.getContextPath() + "/Tyotunnit");
 
@@ -131,7 +131,7 @@ public class ToimeksiantoServlet extends HttpServlet {
 
                     request.setAttribute("tyotehtavat", tyotehtavat);
                 } catch (SQLException ex) {
-                    Logger.getLogger(ToimeksiantoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Tyotehtavat.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
@@ -155,7 +155,7 @@ public class ToimeksiantoServlet extends HttpServlet {
             if (request.getParameter("tyolajivalinta") != null) {
 
                 String tyolaji = URLEncoder.encode(request.getParameter("tyolajivalinta"), koodaus);
-
+                //System.out.println("työlaji: " +tyolaji);
                 tyotehtava.setTyolaji(tyolaji);
 
             } else {
@@ -169,7 +169,7 @@ public class ToimeksiantoServlet extends HttpServlet {
             if (request.getParameter("tyotilavalinta") != null) {
 
                 String tyotila = URLEncoder.encode(request.getParameter("tyotilavalinta"), koodaus);
-
+                System.out.println("työtila: " + tyotila);
                 tyotehtava.setTila(tyotila);
 
             } else {
@@ -183,18 +183,28 @@ public class ToimeksiantoServlet extends HttpServlet {
 
             String kuvaus = request.getParameter("kuvaus");
             if (kuvaus != null && !kuvaus.contentEquals(" ")) {
-                //if (request.getParameter("kuvaus") != null) {
-                System.out.println("kuvaus: " + kuvaus);
-                kuvaus = URLEncoder.encode(request.getParameter("kuvaus"), koodaus);
-
+                // todo: enkoodaus pidentää kentän sisältöä, nyt jätetty 20 merkkiä varaa
+                // jos paljon koodattavia merkkejä, niin saattaa valua yli
+                // sisältöä ei voida lyhentää koodauksen jälkeen, koska silloin saatetaan
+                // katkaista jokin koodi keskeltä ja decodaus ei onnistu
+                //System.out.println("kuvauksen pituus: " +kuvaus.length());
+                if (kuvaus.length() > 100) {
+                    String lyhyt = kuvaus.substring(0, 80);
+                  //  System.out.println("lyhyt:" +lyhyt);
+                    kuvaus = lyhyt;
+                    //System.out.println("kuvaus: "+kuvaus);
+                    //System.out.println("pituus:" +kuvaus.length());
+                }
+                //kuvaus = URLEncoder.encode(request.getParameter("kuvaus"), koodaus);
+                kuvaus = URLEncoder.encode(kuvaus, koodaus);
+                //System.out.println("enkoodatun pituus: " +kuvaus.length());
                 tyotehtava.setKuvaus(kuvaus);
 
             } else {
                 virhe = true;
                 System.out.println("Kuvaus puuttuu");
                 request.setAttribute("virhe", "Kirjoita työn kuvaus");
-//                RequestDispatcher dispatcher = request.getRequestDispatcher("/tyotehtavat.jsp");
-//                dispatcher.forward(request, response);
+
             }
             if (request.getParameter("katuosoite") != null) {
                 String katuosoite = URLEncoder.encode(request.getParameter("katuosoite"), koodaus);
@@ -272,7 +282,7 @@ public class ToimeksiantoServlet extends HttpServlet {
                     asiakkaat = k.haeAsiakkaat();
                     request.setAttribute("asiakkaat", asiakkaat);
                 } catch (SQLException ex) {
-                    Logger.getLogger(ToimeksiantoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Tyotehtavat.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
                 asiakas = request.getParameter("asiakasnumero");
@@ -299,7 +309,7 @@ public class ToimeksiantoServlet extends HttpServlet {
                     tyotehtavat = k.haeAsiakkaanTyotehtavat(asnro);
                     request.setAttribute("tyotehtavat", tyotehtavat);
                 } catch (SQLException ex) {
-                    Logger.getLogger(ToimeksiantoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Tyotehtavat.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
 
@@ -316,7 +326,7 @@ public class ToimeksiantoServlet extends HttpServlet {
                     vastuuhenkilo = k.haeTyontekija(kayttaja);
                     tyotehtava.setVastuuhenkilo(vastuuhenkilo);
                 } catch (SQLException ex) {
-                    Logger.getLogger(ToimeksiantoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Tyotehtavat.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
                 try {
@@ -354,7 +364,7 @@ public class ToimeksiantoServlet extends HttpServlet {
                 tyotehtavat = k.haeAsiakkaanTyotehtavat(asiakasnro);
                 request.setAttribute("tyotehtavat", tyotehtavat);
             } catch (SQLException ex) {
-                Logger.getLogger(ToimeksiantoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Tyotehtavat.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -362,7 +372,7 @@ public class ToimeksiantoServlet extends HttpServlet {
             asiakkaat = k.haeAsiakkaat();
             request.setAttribute("asiakkaat", asiakkaat);
         } catch (SQLException ex) {
-            Logger.getLogger(ToimeksiantoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Tyotehtavat.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         response.setContentType("text/html;charset=UTF-8");

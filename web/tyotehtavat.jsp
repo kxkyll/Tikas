@@ -180,7 +180,7 @@
                 <font color="red"> ${virhe}</font>
                 </tr>
                 <tr> <td width=100% colspan="3"> Asiakkaan kaikki työtehtävät </td> </tr>
-                <tr onmouseup= 'alert ("hiiri alas")'>
+                
 
 
                 <tr>        

@@ -7,6 +7,7 @@ package Webkasittely;
 import Tietokantakasittely.Asiakas;
 import Tietokantakasittely.Kantayhteys;
 import Tietokantakasittely.Tyotehtava;
+import Tietokantakasittely.Tyotunti;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -150,7 +151,7 @@ public class Tyotunnit extends HttpServlet {
         //    processRequest(request, response);
         List<Tyotehtava> tyotehtavat = null;
         List<Asiakas> asiakkaat = null;
-
+        List<Tyotunti> tehtavanMinuutit = null;
         Asiakas a;
         Tyotehtava t;
         String erotin = "\\+";
@@ -159,7 +160,7 @@ public class Tyotunnit extends HttpServlet {
         if (request.getParameter("siirryTehtavat") != null) {
             System.out.println("Tyotunnit: siirryTehtavat");
             response.setContentType("text/html;charset=UTF-8");
-            response.sendRedirect(request.getContextPath() + "/Toimeksianto");
+            response.sendRedirect(request.getContextPath() + "/Tyotehtavat");
 
             response.flushBuffer();
             return;
@@ -184,7 +185,7 @@ public class Tyotunnit extends HttpServlet {
 
                     request.setAttribute("tyotehtavat", tyotehtavat);
                 } catch (SQLException ex) {
-                    Logger.getLogger(ToimeksiantoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Tyotehtavat.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
 
@@ -201,7 +202,7 @@ public class Tyotunnit extends HttpServlet {
                 String asiakas = (request.getParameter("asiakasnumero"));
                 System.out.println("asiakasnumero: " + asiakas);
                 int asiakasnumero = Integer.parseInt(asiakas);
-                request.setAttribute("anro", asiakas);
+                request.setAttribute("anro", asiakasnumero);
                 int tehtavanro = Integer.parseInt(tehtava);
                 request.setAttribute("tnro", tehtavanro);
                 System.out.println("tehtavanro: " + tehtavanro);
@@ -211,8 +212,13 @@ public class Tyotunnit extends HttpServlet {
                     tyotehtavat = k.haeAsiakkaanTyotehtavat(asiakasnumero);
                     String animi = k.haeAsiakkaanNimi(asiakasnumero);
                     request.setAttribute("animi", animi);
-
                     request.setAttribute("tyotehtavat", tyotehtavat);
+                    tehtavanMinuutit = k.haeTyotehtavanTunnit(asiakasnumero, tehtavanro);
+                    System.out.println("tehtavanMinuutit: " + tehtavanMinuutit);
+                    request.setAttribute("tyotunnit", tehtavanMinuutit);
+                    if (!tehtavanMinuutit.isEmpty()) {
+                        // listalle sopiva muoto tehdyistä minuuteista
+                    }
                 } catch (SQLException ex) {
                     Logger.getLogger(Tyotunnit.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -221,15 +227,91 @@ public class Tyotunnit extends HttpServlet {
             }
         }
         if (request.getParameter("lisaaTunnit") != null) {
+            Tyotunti tt = new Tyotunti();
+            int minuuttejaYhteensa = 0;
             String asiakas = (request.getParameter("asiakasnumero"));
+            if (asiakas != null) {
+                int asiakasnumero = Integer.parseInt(asiakas);
+                request.setAttribute("anro", asiakasnumero);
+                tt.setAsiakasnumero(asiakasnumero);
+            } else {
+                virhe = true;
+                request.setAttribute("virhe", "Tuntien lisääminen ei onnistunut, asiakasnumero virheellinen");
+            }
+
             String tehtava = (request.getParameter("tehtavanumero"));
+            if (tehtava != null) {
+                int tehtavanumero = Integer.parseInt(tehtava);
+                request.setAttribute("tnro", tehtavanumero);
+                tt.setTyonumero(tehtavanumero);
+            } else {
+                virhe = true;
+                request.setAttribute("virhe", "Tuntien lisääminen ei onnistunut, tehtavanumero virheellinen");
+            }
+
+
             String tekija = (request.getParameter("tekija"));
+            if (tekija != null) {
+                try {
+                    int henkilonumero = k.haeHenkilonumeroNimella(tekija);
+                    tt.setHenkilonumero(henkilonumero);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Tyotunnit.class.getName()).log(Level.SEVERE, null, ex);
+                    virhe = true;
+                    request.setAttribute("virhe", "Tuntien lisääminen ei onnistunut, henkilonumeron haku epäonnistui");
+                }
+            } else {
+                virhe = true;
+                request.setAttribute("virhe", "Tuntien lisääminen ei onnistunut, henkilönumero virheellinen");
+            }
+
             String tuntimaara = (request.getParameter("tunnit"));
-            Double tunnit = Double.parseDouble(tuntimaara);
+            if (tuntimaara != null) {
+                int tunnit = Integer.parseInt(tuntimaara);
+                System.out.println("tunteja: " + tunnit);
+                minuuttejaYhteensa = tunnit * 60;
+                System.out.println("minuuttejaYhteensa: " + minuuttejaYhteensa);
+            } // tunteja ei ole pakko olla -> sallitaan vain minuuttien tallentaminen
+
+            String minuuttimaara = (request.getParameter("minuutit"));
+            if (minuuttimaara != null) {
+                int minuutit = Integer.parseInt(minuuttimaara);
+                System.out.println("minuutteja: " + minuutit);
+                minuuttejaYhteensa = minuuttejaYhteensa + minuutit;
+                System.out.println("minuuttejaYhteensa: " + minuuttejaYhteensa);
+            } // minuutteja ei ole pakko olla -> sallitaan vain tuntien tallentaminen
+
+            tt.setMinuutit(minuuttejaYhteensa);
+            if (!virhe) {
+                try {
+                    k.lisaaTyotunnit(tt);
+                    String as = request.getParameter("asiakasnumero");
+
+                    if (as != null) {
+                        int asiakasnumero = Integer.parseInt(asiakas);
+                        tyotehtavat = k.haeAsiakkaanTyotehtavat(asiakasnumero);
+                        String animi = k.haeAsiakkaanNimi(asiakasnumero);
+                        request.setAttribute("animi", animi);
+                        request.setAttribute("tyotehtavat", tyotehtavat);
+                        String te = request.getParameter("tehtavanumero");
+
+                        if (te != null) {
+                            int tehtavanumero = Integer.parseInt(tehtava);
+                            tehtavanMinuutit = k.haeTyotehtavanTunnit(asiakasnumero, tehtavanumero);
+
+                            request.setAttribute("tyotunnit", tehtavanMinuutit);
+                        }
+                    }
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(Tyotunnit.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
 
 
         }
         try {
+
 
             asiakkaat = k.haeAsiakkaat();
             request.setAttribute("asiakkaat", asiakkaat);
@@ -243,7 +325,6 @@ public class Tyotunnit extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         RequestDispatcher dispatcher = request.getRequestDispatcher("/tyotunnit.jsp");
         dispatcher.forward(request, response);
-        return;
 
 
     }

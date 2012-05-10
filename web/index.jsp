@@ -12,8 +12,10 @@
         <title>Työtehtävät</title>
     </head>
     <body>
-        <h1>Heipähei !</h1>
-        <a href="Login" target="">Kirjaudu</a>
+        <h1>Työtehtävien kirjausjärjestelmä</h1>
+        <%--<a href="Login" target="">Kirjaudu</a>--%>
+        <meta http-equiv="refresh" content="0;url=${pageContext.request.requestURI}Login">
+
        
     </body>
 </html>

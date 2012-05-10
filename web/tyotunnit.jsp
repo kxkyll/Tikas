@@ -172,27 +172,31 @@
 
                 </table> </td>
                 <tr>        
-                    <td width=100%> <input type="text" name="tehtavanumero" value=${tnro}>
-                        <table id="tunnit">
-                            <th>Tuntia (hh.mm) </th>
-                            <th>Tekijä</th>
+                <input type="hidden" name="tehtavanumero" value=${tnro}>
+                <td width=100% colspan="2">
+                    <table id="tunnit">
+                        <th>Tehtyä työtä (min) </th>
+                        <th>Tekijä</th>
 
-                </tr>
+                        </tr>
 
+                        <c:forEach items="${tyotunnit}" var="tyotunti">
+                            <tr>
 
-                <tr>
-                    <c:forEach items="${tyot}" var="tyo">
-                        <td>${tyo.tunnit}</td>
-                        <td>${tyo.henkilo}</td>
-                    </c:forEach>
-                    <td><input type="time" name="tunnit"></td>
+                                <td>${tyotunti.minuutit}</td>
+                                <td>${tyotunti.henkilonumero}</td>
+                            </tr>
+                        </c:forEach>
+                        <td>hh:<input type="text" name="tunnit" maxlength="2" width="2">
+                            mm:<input type="text" name="minuutit" maxlength="2" width="2"></td>
                         <td>${tekija}</td>
-                </tr>
-                <tr> <td colspan="2">
-                <input type="submit" name="lisaaTunnit" value="Lisää työtunnit"/>
-                <input type="hidden" name="tekija" value ="${tekija}"/>
-                    </td>
-                </tr>
-            </table> </td>
+                        </tr>
+                        <tr> <td colspan="2">
+                                <input type="submit" name="lisaaTunnit" value="Lisää työtunnit"/>
+                                <input type="hidden" name="tekija" value ="${tekija}"/>
+                            </td>
+                        </tr>
+                    </table> </td>
 
-    </table>
+            </table>
+            
