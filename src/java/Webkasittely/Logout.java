@@ -48,7 +48,7 @@ public class Logout extends HttpServlet {
 //            out.println("<h1>Servlet Logout at " + request.getContextPath() + "</h1>");
 //            out.println("</body>");
 //            out.println("</html>");
-        } finally {            
+        } finally {
             out.close();
         }
     }
@@ -66,7 +66,19 @@ public class Logout extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //   processRequest(request, response);
+        System.out.println("logout doget");
+        request.setCharacterEncoding("UTF8");
+        HttpSession session = request.getSession(false);
+        if (session != null) { // lopetetaan sessio jos sellainen on
+            System.out.println("sessio on ja se lopetetaan");
+            session.invalidate();
+        }
+        //processRequest(request, response);
+
+        request.setAttribute("viesti", "Olet kirjautunut ulos");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/logout.jsp");
+        dispatcher.forward(request, response);
     }
 
     /**
@@ -81,15 +93,26 @@ public class Logout extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        if (session != null) { // lopetetaan sessio jos sellainen on
-            session.invalidate();
+        System.out.println("logout dopost");
+        request.setCharacterEncoding("UTF8");
+        if (request.getParameter("siirryLogin") != null) {
+            System.out.println("siirryLogin painettu");
+
+
+//        HttpSession session = request.getSession(false);
+//        if (session != null) { // lopetetaan sessio jos sellainen on
+//            session.invalidate();
+//        }
+//        //processRequest(request, response);
+
+            request.setAttribute("viesti", "Anna käyttäjätunnus ja salasana");
+//            RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
+//            dispatcher.forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/Login");
+
+            response.flushBuffer();
+            return;
         }
-        //processRequest(request, response);
-        
-        request.setAttribute("viesti", "Olet kirjautunut ulos");
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
-                dispatcher.forward(request, response);
     }
 
     /**

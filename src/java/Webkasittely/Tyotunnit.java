@@ -82,7 +82,7 @@ public class Tyotunnit extends HttpServlet {
         List<Tyotehtava> tyotehtavat = null;
         List<Asiakas> asiakkaat = null;
         Asiakas a = null;
-
+        request.setCharacterEncoding("UTF8");
         HttpSession session = request.getSession(false);
         if (session == null) { // käyttäjällä ei ole sessiota
             System.out.println("ei ole sessiota");
@@ -99,18 +99,21 @@ public class Tyotunnit extends HttpServlet {
                 String tyontekija;
                 try {
                     tyontekija = k.haeTyontekija(kayttaja);
-                    System.out.println("työntekijä:" +tyontekija);
+                    System.out.println("työntekijä:" + tyontekija);
                     request.setAttribute("tekija", tyontekija);
                 } catch (SQLException ex) {
                     Logger.getLogger(Tyotunnit.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
                 System.out.println("tunnukset sessiolla");
             } else {
                 System.out.println("kayttaja ei ole antanut käyttäjätunnusta "
                         + "tai salasanaa, tai ne ovat kadonneet sessiosta");
+
+                session.invalidate();
                 response.setContentType("text/html;charset=UTF-8");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+                response.sendRedirect("Login");
+//                request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
 
             }
@@ -152,7 +155,7 @@ public class Tyotunnit extends HttpServlet {
         Tyotehtava t;
         String erotin = "\\+";
         Boolean virhe = false;
-        
+        request.setCharacterEncoding("UTF8");
         if (request.getParameter("siirryTehtavat") != null) {
             System.out.println("Tyotunnit: siirryTehtavat");
             response.setContentType("text/html;charset=UTF-8");
@@ -162,7 +165,7 @@ public class Tyotunnit extends HttpServlet {
             return;
 
         }
-        
+
         if (request.getParameter("haeAsiakkaanTehtavat") != null) {
             String asiakas = (request.getParameter("asiakas"));
             System.out.println("asiakas: " + asiakas);
@@ -223,8 +226,8 @@ public class Tyotunnit extends HttpServlet {
             String tekija = (request.getParameter("tekija"));
             String tuntimaara = (request.getParameter("tunnit"));
             Double tunnit = Double.parseDouble(tuntimaara);
-            
-            
+
+
         }
         try {
 
@@ -236,7 +239,7 @@ public class Tyotunnit extends HttpServlet {
         }
         String tekija = (request.getParameter("tekija"));
         request.setAttribute("tekija", tekija);
-        
+
         response.setContentType("text/html;charset=UTF-8");
         RequestDispatcher dispatcher = request.getRequestDispatcher("/tyotunnit.jsp");
         dispatcher.forward(request, response);

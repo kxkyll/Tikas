@@ -35,10 +35,11 @@ public class ToimeksiantoServlet extends HttpServlet {
         List<Tyotehtava> tyotehtavat = null;
         List<Asiakas> asiakkaat = null;
         Asiakas a = null;
-
+        request.setCharacterEncoding("UTF8");
         HttpSession session = request.getSession(false);
         if (session == null) { // käyttäjällä ei ole sessiota
             System.out.println("ei ole sessiota");
+
             response.setContentType("text/html;charset=UTF-8");
             response.sendRedirect("Login");
             //request.getRequestDispatcher("tyotehtavat.jsp").forward(request, response);
@@ -53,20 +54,19 @@ public class ToimeksiantoServlet extends HttpServlet {
             } else {
                 System.out.println("kayttaja ei ole antanut käyttäjätunnusta "
                         + "tai salasanaa, tai ne ovat kadonneet sessiosta");
+                session.invalidate();
                 response.setContentType("text/html;charset=UTF-8");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+                response.sendRedirect("Login");
+//                response.setContentType("text/html;charset=UTF-8");
+//                request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
 
             }
 
-            // tarkista käyttäjätiedot
-            // luo sessio
+
         }
 
-        // testi usersia varten
 
-        //request.getRequestDispatcher("\\:yhteys.jsp");
-        // testi usersia varten
         try {
 
             asiakkaat = k.haeAsiakkaat();
@@ -91,6 +91,7 @@ public class ToimeksiantoServlet extends HttpServlet {
         Asiakas a;
         String erotin = "\\+";
         Boolean virhe = false;
+        request.setCharacterEncoding("UTF8");
         if (request.getParameter("siirryTunnit") != null) {
             System.out.println("Toimeksianto: siirryTunnit");
             response.setContentType("text/html;charset=UTF-8");

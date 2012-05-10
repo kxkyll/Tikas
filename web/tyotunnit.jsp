@@ -64,7 +64,7 @@
                     <td height="20" align="right"> 
 
                         <font color="blue"> Olet kirjautunut käyttäjätunnuksella: ${ktunnus} 
-                        <a href="Login" target="">Kirjaudu ulos</a></font>
+                        <a href="Logout" target="">Kirjaudu ulos</a></font>
 
                     </td>
                 </tr>

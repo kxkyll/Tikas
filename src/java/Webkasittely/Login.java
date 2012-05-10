@@ -73,7 +73,12 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        System.out.println("login doGet");
+        request.setCharacterEncoding("UTF8");
+        request.setAttribute("viesti", "Anna käyttäjätunnus ja salasana");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+        dispatcher.forward(request, response);
+        //processRequest(request, response);
 
     }
 
@@ -92,7 +97,7 @@ public class Login extends HttpServlet {
         //processRequest(request, response);
 
         System.out.println("Login doPost");
-
+        request.setCharacterEncoding("UTF8");
 
         String ktunnus = request.getParameter("ktunnus");
         System.out.println("ktunnus: " + ktunnus);
