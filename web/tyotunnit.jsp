@@ -175,7 +175,7 @@
                 <input type="hidden" name="tehtavanumero" value=${tnro}>
                 <td width=100% colspan="2">
                     <table id="tunnit">
-                        <th>Tehtyä työtä (min) </th>
+                        <th>Tehtyä työtä (hh:mm) </th>
                         <th>Tekijä</th>
 
                         </tr>
@@ -183,7 +183,7 @@
                         <c:forEach items="${tyotunnit}" var="tyotunti">
                             <tr>
 
-                                <td>${tyotunti.minuutit}</td>
+                                <td>${tyotunti.hh}:${tyotunti.mm}</td>
                                 <td>${tyotunti.henkilonumero}</td>
                             </tr>
                         </c:forEach>

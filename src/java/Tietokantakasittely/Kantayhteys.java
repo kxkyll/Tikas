@@ -522,9 +522,10 @@ public class Kantayhteys {
             int tyonumero = tulosjoukko.getInt("tyonumero");
             int henkilonumero = tulosjoukko.getInt("henkilonumero");
             int minuutit = tulosjoukko.getInt("minuutit");
-            
+            int hh = minuutit / 60;
+            int mm = minuutit % 60;
 
-            Tyotunti tt = new Tyotunti(asiakasnumero, tyonumero, henkilonumero, minuutit); 
+            Tyotunti tt = new Tyotunti(asiakasnumero, tyonumero, henkilonumero, minuutit, hh, mm); 
             tehdytMinuutit.add(tt);
         }
 
